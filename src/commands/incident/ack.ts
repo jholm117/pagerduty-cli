@@ -59,7 +59,7 @@ export default class IncidentAck extends AuthenticatedBaseCommand<typeof Inciden
       const params = { user_ids: [me.user.id] }
       const incidents = await this.pd.fetchWithSpinner('incidents', { params: params, activityDescription: 'Getting incidents from PD' })
       if (incidents.length === 0) {
-        // eslint-disable-next-line no-console
+         
         log.error.red(chalk.bold.red('No incidents to acknowledge'))
         this.exit(0)
       }
@@ -95,7 +95,7 @@ export default class IncidentAck extends AuthenticatedBaseCommand<typeof Inciden
 
     const r = await this.pd.batchedRequestWithSpinner(requests, { activityDescription: `Acknowledging ${requests.length} incidents` })
     for (const failure of r.getFailedIndices()) {
-      // eslint-disable-next-line no-console
+       
       console.error(`${chalk.bold.red('Failed to acknowledge incident ')}${chalk.bold.blue(requests[failure].data.incident.id)}: ${r.results[failure].getFormattedError()}`)
     }
   }

@@ -108,7 +108,7 @@ export default class UserSet extends AuthenticatedBaseCommand<typeof UserSet> {
     })
 
     for (const failure of r.getFailedIndices()) {
-      // eslint-disable-next-line no-console
+       
       console.error(`${chalk.bold.red('Failed to set user ')}${chalk.bold.blue(requests[failure].data.user.id)}: ${r.results[failure].getFormattedError()}`)
     }
     for (const s of r.getDatas()) {
@@ -122,7 +122,7 @@ export default class UserSet extends AuthenticatedBaseCommand<typeof UserSet> {
               continue
             }
           }
-          // eslint-disable-next-line no-console
+           
           console.error(`${chalk.bold.red('Failed to set value on user ')}${chalk.bold.blue(s.service.id)}`)
         }
       }

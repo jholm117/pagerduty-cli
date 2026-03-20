@@ -92,7 +92,7 @@ export default class UserLog extends ListBaseCommand<typeof UserLog> {
     let log_entries: any[] = []
     for (const user_id of user_ids) {
       ux.action.start(`Getting log entries for user ${chalk.bold.blue(user_id)}`)
-      // eslint-disable-next-line no-await-in-loop
+       
       const r = await this.pd.fetchWithSpinner(`users/${user_id}/log_entries`, {
         params: params,
         activityDescription: `Getting log entries for user ${chalk.bold.blue(user_id)}`,

@@ -79,7 +79,7 @@ export default class TeamUserList extends AuthenticatedBaseCommand<typeof TeamUs
 
     let members: any[] = []
     for (const team_id of team_ids) {
-      // eslint-disable-next-line no-await-in-loop
+       
       const r = await this.pd.fetchWithSpinner(`teams/${team_id}/members`, {
         activityDescription: `Getting members of team ${chalk.bold.blue(team_id)}`,
         stopSpinnerWhenDone: false,

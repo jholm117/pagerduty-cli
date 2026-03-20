@@ -1,5 +1,5 @@
 import { BaseCommand } from '../../base/base-command'
-import axios, {Method} from 'axios'
+import axios from 'axios'
 import {ux, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import * as utils from '../../utils'

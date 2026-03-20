@@ -79,7 +79,7 @@ export default class TeamEpList extends AuthenticatedBaseCommand<typeof TeamEpLi
 
     let eps: any[] = []
     for (const team_id of team_ids) {
-      // eslint-disable-next-line no-await-in-loop
+       
       const r = await this.pd.fetchWithSpinner(`escalation_policies`, {
         params: {
           team_ids: [team_id],

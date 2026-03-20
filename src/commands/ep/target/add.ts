@@ -86,7 +86,7 @@ export default class EpTargetAdd extends AuthenticatedBaseCommand<typeof EpTarge
     }
     if (this.flags.schedule_names) {
       for (const name of this.flags.schedule_names) {
-        // eslint-disable-next-line no-await-in-loop
+         
         const schedule_id = await this.pd.scheduleIDForName(name)
         if (schedule_id === null) {
           this.error(`No schedule was found with the name ${chalk.bold.blue(name)}`, { exit: 1 })
@@ -108,7 +108,7 @@ export default class EpTargetAdd extends AuthenticatedBaseCommand<typeof EpTarge
     }
     if (this.flags.user_emails) {
       for (const email of this.flags.user_emails) {
-        // eslint-disable-next-line no-await-in-loop
+         
         const user_id = await this.pd.userIDForEmail(email)
         if (user_id === null) {
           this.error(`No user was found with the email ${chalk.bold.blue(email)}`, { exit: 1 })
@@ -143,7 +143,7 @@ export default class EpTargetAdd extends AuthenticatedBaseCommand<typeof EpTarge
     for (const ep of eps) {
       const levels = ep.escalation_policy.escalation_rules
       if (levels.length < this.flags.level) {
-        // eslint-disable-next-line no-console
+         
         console.error(chalk.bold.red('Escalation policy ') + chalk.bold.blue(ep.escalation_policy.summary) + chalk.bold.red(` does not have level ${this.flags.level}`))
         continue
       }
@@ -186,7 +186,7 @@ export default class EpTargetAdd extends AuthenticatedBaseCommand<typeof EpTarge
     })
     for (const failure of r.getFailedIndices()) {
       const f = requests[failure] as any
-      // eslint-disable-next-line no-console
+       
       console.error(`${chalk.bold.red('Failed to update escalation policy ')}${chalk.bold.blue(f.data.escalation_policy.id)}: ${r.results[failure].getFormattedError()}`)
     }
   }

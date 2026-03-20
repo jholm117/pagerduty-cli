@@ -91,7 +91,7 @@ export default class EpLevelAdd extends AuthenticatedBaseCommand<typeof EpLevelA
     }
     if (this.flags.schedule_names) {
       for (const name of this.flags.schedule_names) {
-        // eslint-disable-next-line no-await-in-loop
+         
         const schedule_id = await this.pd.scheduleIDForName(name)
         if (schedule_id === null) {
           this.error(`No schedule was found with the name ${chalk.bold.blue(name)}`, { exit: 1 })
@@ -113,7 +113,7 @@ export default class EpLevelAdd extends AuthenticatedBaseCommand<typeof EpLevelA
     }
     if (this.flags.user_emails) {
       for (const email of this.flags.user_emails) {
-        // eslint-disable-next-line no-await-in-loop
+         
         const user_id = await this.pd.userIDForEmail(email)
         if (user_id === null) {
           this.error(`No user was found with the email ${chalk.bold.blue(email)}`, { exit: 1 })
@@ -186,7 +186,7 @@ export default class EpLevelAdd extends AuthenticatedBaseCommand<typeof EpLevelA
     })
     for (const failure of r.getFailedIndices()) {
       const f = requests[failure] as any
-      // eslint-disable-next-line no-console
+       
       console.error(`${chalk.bold.red('Failed to update escalation policy ')}${chalk.bold.blue(f.data.escalation_policy.id)}: ${r.results[failure].getFormattedError()}`)
     }
   }

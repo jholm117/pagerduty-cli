@@ -3,7 +3,6 @@ import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import getStream from 'get-stream'
 import * as utils from '../../../utils'
-import { PD } from '../../../pd'
 
 export default class IncidentSubscriberUpdate extends AuthenticatedBaseCommand<typeof IncidentSubscriberUpdate> {
   static description = 'Send a status update to PagerDuty Incident Subscribers'
@@ -99,7 +98,7 @@ export default class IncidentSubscriberUpdate extends AuthenticatedBaseCommand<t
 
     const r = await this.pd.batchedRequestWithSpinner(requests, { activityDescription: `Sending a status update on ${incident_ids.length} incidents` })
     for (const failure of r.getFailedIndices()) {
-      // eslint-disable-next-line no-console
+       
       console.error(`${chalk.bold.red('Failed to send a status update for incident ')}${chalk.bold.blue(r.requests[failure].endpoint.split('/')[1])}: ${r.results[failure].getFormattedError()}`)
     }
   }

@@ -106,7 +106,7 @@ export default class IncidentPriority extends AuthenticatedBaseCommand<typeof In
       activityDescription: `Setting priority ${chalk.bold.blue(`${this.flags.priority} (${priority_id})`)} on ${incident_ids.length} incident(s)`,
     })
     for (const failure of r.getFailedIndices()) {
-      // eslint-disable-next-line no-console
+       
       console.error(`${chalk.bold.red('Failed to set priority on incident ')}${chalk.bold.blue(requests[failure].data.incident.id)}: ${r.results[failure].getFormattedError()}`)
     }
   }

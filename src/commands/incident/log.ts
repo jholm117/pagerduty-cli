@@ -3,8 +3,6 @@ import {ux, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import getStream from 'get-stream'
 import * as utils from '../../utils'
-import jp from 'jsonpath'
-import { splitDedupAndFlatten } from '../../utils'
 
 export default class IncidentLog extends AuthenticatedBaseCommand<typeof IncidentLog> {
   static description = 'Show PagerDuty Incident Log Entries'
@@ -81,7 +79,7 @@ export default class IncidentLog extends AuthenticatedBaseCommand<typeof Inciden
     let log_entries: any[] = []
     for (const incident_id of incident_ids) {
       ux.action.start(`Getting log entries for incident ${chalk.bold.blue(incident_id)}`)
-      // eslint-disable-next-line no-await-in-loop
+       
       const r = await this.pd.fetchWithSpinner(`incidents/${incident_id}/log_entries`,
         {
           params: params,

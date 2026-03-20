@@ -68,10 +68,6 @@ export default class AutomationActionList extends ListBaseCommand<typeof Automat
       },
     }
 
-    const options = {
-      ...this.flags, // parsed flags
-    }
-
     this.printTable(actions, columns, this.flags)
   }
 }

@@ -109,7 +109,7 @@ export default class ServiceSet extends AuthenticatedBaseCommand<typeof ServiceS
       activityDescription: `Setting ${chalk.bold.blue(kvString)}' on ${service_ids.length} services`,
     })
     for (const failure of r.getFailedIndices()) {
-      // eslint-disable-next-line no-console
+       
       console.error(`${chalk.bold.red('Failed to set service ')}${chalk.bold.blue(requests[failure].data.service.id)}: ${r.results[failure].getFormattedError()}`)
     }
     for (const s of r.getDatas()) {
@@ -129,7 +129,7 @@ export default class ServiceSet extends AuthenticatedBaseCommand<typeof ServiceS
               continue
             }
           }
-          // eslint-disable-next-line no-console
+           
           console.error(`${chalk.bold.red('Failed to set value on service ')}${chalk.bold.blue(s.service.id)}`)
         }
       }

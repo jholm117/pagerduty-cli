@@ -2,7 +2,6 @@ import { AuthenticatedBaseCommand } from '../../../base/authenticated-base-comma
 import {ux, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import * as utils from '../../../utils'
-import jp from 'jsonpath'
 
 export default class FieldOptionRemove extends AuthenticatedBaseCommand<typeof FieldOptionRemove> {
   static description = 'Remove an option from a fixed-options Custom Field'
@@ -64,6 +63,6 @@ export default class FieldOptionRemove extends AuthenticatedBaseCommand<typeof F
       this.error(`Failed to remove field option: ${r.getFormattedError()}`, {exit: 1})
     }
     ux.action.stop(chalk.bold.green('done'))
-    const returned_field = r.getData()
+    const _returned_field = r.getData()
   }
 }

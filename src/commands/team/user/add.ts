@@ -69,7 +69,7 @@ export default class TeamUserAdd extends AuthenticatedBaseCommand<typeof TeamUse
     }
     if (this.flags.user_emails) {
       for (const email of this.flags.user_emails) {
-        // eslint-disable-next-line no-await-in-loop
+         
         const user_id = await this.pd.userIDForEmail(email)
         if (user_id === null) {
           this.error(`No user was found with the email ${chalk.bold.blue(email)}`, { exit: 1 })
@@ -109,7 +109,7 @@ export default class TeamUserAdd extends AuthenticatedBaseCommand<typeof TeamUse
     for (const failure of r.getFailedIndices()) {
       const f = requests[failure] as any
       const [, team_id, , user_id] = f.endpoint.split('/')
-      // eslint-disable-next-line no-console
+       
       console.error(`${chalk.bold.red('Failed to add user ')}${chalk.bold.blue(user_id)}${chalk.bold.red(' to team ')}${chalk.bold.blue(team_id)}: ${r.results[failure].getFormattedError()}`)
     }
   }

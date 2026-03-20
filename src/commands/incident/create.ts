@@ -176,7 +176,7 @@ export default class IncidentCreate extends AuthenticatedBaseCommand<typeof Inci
     if (this.flags.user) {
       for (const email of this.flags.user) {
         ux.action.start(`Finding user ${chalk.bold.blue(email)}`)
-        // eslint-disable-next-line no-await-in-loop
+         
         const user: any = await this.pd.userIDForEmail(email)
         if (!user) {
           ux.action.stop(chalk.bold.red('failed!'))

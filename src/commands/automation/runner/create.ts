@@ -2,7 +2,6 @@ import { AuthenticatedBaseCommand } from "../../../base/authenticated-base-comma
 import chalk from 'chalk'
 import { ux, Flags } from "@oclif/core";
 import * as utils from '../../../utils'
-import getStream from 'get-stream'
 import open from 'open'
 
 export default class AutomationRunnerCreate extends AuthenticatedBaseCommand<typeof AutomationRunnerCreate> {
@@ -62,7 +61,7 @@ export default class AutomationRunnerCreate extends AuthenticatedBaseCommand<typ
       runner_type,
       runbook_base_uri,
       runbook_api_key,
-      pipe,
+      pipe: _pipe,
     } = this.flags
 
     let team_ids: string[] = []

@@ -76,12 +76,12 @@ export default class EpLevelRemove extends AuthenticatedBaseCommand<typeof EpLev
     for (const ep of eps) {
       const levels = ep.escalation_policy.escalation_rules
       if (levels.length < this.flags.level) {
-        // eslint-disable-next-line no-console
+         
         console.error(chalk.bold.red('Escalation policy ') + chalk.bold.blue(ep.escalation_policy.summary) + chalk.bold.red(` does not have level ${this.flags.level}`))
         continue
       }
       if (levels.length === 1) {
-        // eslint-disable-next-line no-console
+         
         console.error(chalk.bold.red('Escalation policy ') + chalk.bold.blue(ep.escalation_policy.summary) + chalk.bold.red(' only has one level'))
         continue
       }
@@ -107,7 +107,7 @@ export default class EpLevelRemove extends AuthenticatedBaseCommand<typeof EpLev
     })
     for (const failure of r.getFailedIndices()) {
       const f = requests[failure] as any
-      // eslint-disable-next-line no-console
+       
       console.error(`${chalk.bold.red('Failed to update escalation policy ')}${chalk.bold.blue(f.data.escalation_policy.id)}: ${r.results[failure].getFormattedError()}`)
     }
   }

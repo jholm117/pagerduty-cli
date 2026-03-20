@@ -28,6 +28,7 @@
     "tslib": "^2.4.0"
   },
   "devDependencies": {
+    "@eslint/compat": "^1.4.1",
     "@oclif/test": "^3.2.15",
     "@types/chai": "^4",
     "@types/fs-extra": "^11.0.4",
@@ -36,8 +37,8 @@
     "@types/node": "^22.19.15",
     "@types/simple-oauth2": "^5.0.8",
     "chai": "^4",
-    "eslint": ">=8",
-    "eslint-config-oclif": "^4.0.0",
+    "eslint": "^9.39.4",
+    "eslint-config-oclif": "^6.0.150",
     "mocha": "^10.0.0",
     "nyc": "^15.1.0",
     "ts-node": "^10.7.0",
@@ -177,7 +178,7 @@
   "repository": "martindstone/pagerduty-cli",
   "scripts": {
     "postpack": "rm -f oclif.manifest.json",
-    "posttest": "eslint . --ext .ts --config .eslintrc",
+    "posttest": "eslint src/",
     "prepack": "rm -rf lib && tsc -b && oclif manifest && oclif readme --multi",
     "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif readme --multi && git add README.md docs"

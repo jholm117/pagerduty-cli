@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import { ux, Flags } from '@oclif/core'
+import { ux } from '@oclif/core'
 import { PD } from '../../pd'
 
 export default class ScheduleListDeletedUsers extends AuthenticatedBaseCommand<typeof ScheduleListDeletedUsers> {

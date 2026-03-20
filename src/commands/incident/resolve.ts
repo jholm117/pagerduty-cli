@@ -43,7 +43,7 @@ export default class IncidentResolve extends AuthenticatedBaseCommand<typeof Inc
       const params = { user_ids: [me.user.id] }
       const incidents = await this.pd.fetchWithSpinner('incidents', { params: params, activityDescription: 'Getting incidents from PD' })
       if (incidents.length === 0) {
-        // eslint-disable-next-line no-console
+         
         console.warn(chalk.bold.red('No incidents to resolve'))
         this.exit(0)
       }
@@ -76,7 +76,7 @@ export default class IncidentResolve extends AuthenticatedBaseCommand<typeof Inc
 
     const r = await this.pd.batchedRequestWithSpinner(requests, { activityDescription: `Resolving ${requests.length} incidents` })
     for (const failure of r.getFailedIndices()) {
-      // eslint-disable-next-line no-console
+       
       console.error(`${chalk.bold.red('Failed to resolve incident ')}${chalk.bold.blue(requests[failure].data.incident.id)}: ${r.results[failure].getFormattedError()}`)
     }
   }

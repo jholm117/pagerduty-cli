@@ -94,7 +94,7 @@ export default class IncidentSet extends AuthenticatedBaseCommand<typeof Inciden
     }
     const r = await this.pd.batchedRequestWithSpinner(requests, { activityDescription: `Updating ${incident_ids.length} incidents` })
     for (const failure of r.getFailedIndices()) {
-      // eslint-disable-next-line no-console
+       
       console.error(`${chalk.bold.red('Failed to update incident ')}${chalk.bold.blue(requests[failure].data.incident.id)}: ${r.results[failure].getFormattedError()}`)
     }
   }

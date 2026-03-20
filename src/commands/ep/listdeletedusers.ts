@@ -1,6 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import { ux, Flags } from '@oclif/core'
-import { PD } from '../../pd'
+import { ux } from '@oclif/core'
 
 export default class EpListDeletedUsers extends AuthenticatedBaseCommand<typeof EpListDeletedUsers> {
   static description = 'List deleted users in all PagerDuty Escalation Policies'

@@ -1,5 +1,4 @@
 import { BaseCommand } from '../../base/base-command'
-import { ux } from '@oclif/core'
 import { Config } from '../../config'
 
 export default class AuthList extends BaseCommand<typeof AuthList> {

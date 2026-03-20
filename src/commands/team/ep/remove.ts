@@ -63,7 +63,7 @@ export default class TeamEpRemove extends AuthenticatedBaseCommand<typeof TeamEp
     }
     if (this.flags.ep_names) {
       for (const name of this.flags.ep_names) {
-        // eslint-disable-next-line no-await-in-loop
+         
         const ep_id = await this.pd.epIDForName(name)
         if (ep_id === null) {
           this.error(`No escalation policy was found with the name ${chalk.bold.blue(name)}`, { exit: 1 })
@@ -100,7 +100,7 @@ export default class TeamEpRemove extends AuthenticatedBaseCommand<typeof TeamEp
     for (const failure of r.getFailedIndices()) {
       const f = requests[failure] as any
       const [, team_id, , ep_id] = f.endpoint.split('/')
-      // eslint-disable-next-line no-console
+       
       console.error(`${chalk.bold.red('Failed to remove EP ')}${chalk.bold.blue(ep_id)}${chalk.bold.red(' from team ')}${chalk.bold.blue(team_id)}: ${r.results[failure].getFormattedError()}`)
     }
   }

@@ -105,7 +105,7 @@ export default class IncidentList extends ListBaseCommand<typeof IncidentList> {
     if (this.flags.assignees) {
       ux.action.start('Finding users')
       for (const email of this.flags.assignees) {
-        // eslint-disable-next-line no-await-in-loop
+         
         const r = await this.pd.fetch('users', { params: { query: email } })
         if (r.length === 0) {
           this.warn(`No users found for filter ${chalk.bold.blue(email)}`)
@@ -118,7 +118,7 @@ export default class IncidentList extends ListBaseCommand<typeof IncidentList> {
     if (this.flags.exact_assignees) {
       ux.action.start('Finding users')
       for (const email of this.flags.exact_assignees) {
-        // eslint-disable-next-line no-await-in-loop
+         
         const r = await this.pd.userIDForEmail(email)
         if (r) {
           user_ids.push(r)
@@ -140,7 +140,7 @@ export default class IncidentList extends ListBaseCommand<typeof IncidentList> {
     if (this.flags.teams) {
       ux.action.start('Finding teams')
       for (const name of this.flags.teams) {
-        // eslint-disable-next-line no-await-in-loop
+         
         const r = await this.pd.fetch('teams', { params: { query: name } })
         if (r.length === 0) {
           this.warn(`No teams found for filter ${chalk.bold.blue(name)}`)
@@ -153,7 +153,7 @@ export default class IncidentList extends ListBaseCommand<typeof IncidentList> {
     if (this.flags.exact_teams) {
       ux.action.start('Finding teams')
       for (const name of this.flags.exact_teams) {
-        // eslint-disable-next-line no-await-in-loop
+         
         const r = await this.pd.teamIDForName(name)
         if (r) {
           team_ids.push(r)
@@ -175,7 +175,7 @@ export default class IncidentList extends ListBaseCommand<typeof IncidentList> {
     if (this.flags.services) {
       ux.action.start('Finding services')
       for (const name of this.flags.services) {
-        // eslint-disable-next-line no-await-in-loop
+         
         const r = await this.pd.fetch('services', { params: { query: name } })
         if (r.length === 0) {
           this.warn(`No services found for filter ${chalk.bold.blue(name)}`)
@@ -188,7 +188,7 @@ export default class IncidentList extends ListBaseCommand<typeof IncidentList> {
     if (this.flags.exact_services) {
       ux.action.start('Finding services')
       for (const name of this.flags.exact_services) {
-        // eslint-disable-next-line no-await-in-loop
+         
         const r = await this.pd.serviceIDForName(name)
         if (r) {
           service_ids.push(r)

@@ -1,8 +1,4 @@
-import {ux} from '@oclif/core'
-
-/* eslint-disable no-process-exit */
-/* eslint-disable unicorn/no-process-exit */
-/* eslint-disable no-console */
+ 
 export function formatField(field: any, delimiter = '\n'): string {
   switch (typeof field) {
   case 'undefined':
@@ -109,7 +105,6 @@ export function putBodyForSetAttributes(
     },
   }
   for (const attribute of attributes) {
-    let value;
     if (typeof attribute.value === 'string') {
       // strings
       setValueAtPath(body[pdObjectType], attribute.key, (attribute.value && attribute.value.trim().length > 0) ? attribute.value : null)

@@ -65,7 +65,7 @@ export default class IncidentAlerts extends AuthenticatedBaseCommand<typeof Inci
         stopSpinnerWhenDone: false,
       })
       if (incidents.length === 0) {
-        // eslint-disable-next-line no-console
+         
         log.error.red(chalk.bold.red('No incidents to acknowledge'))
         this.exit(0)
       }
@@ -86,7 +86,7 @@ export default class IncidentAlerts extends AuthenticatedBaseCommand<typeof Inci
 
     let alerts: any[] = []
     for (const incident_id of incident_ids) {
-      // eslint-disable-next-line no-await-in-loop
+       
       const r = await this.pd.fetchWithSpinner(`incidents/${incident_id}/alerts`, {
         activityDescription: `Getting alerts for incident ${chalk.bold.blue(incident_id)}`,
         stopSpinnerWhenDone: false,

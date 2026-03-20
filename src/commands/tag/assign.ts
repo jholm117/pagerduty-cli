@@ -160,7 +160,7 @@ export default class TagAssign extends AuthenticatedBaseCommand<typeof TagAssign
     })
 
     for (const failure of r.getFailedIndices()) {
-      // eslint-disable-next-line no-console
+       
       console.error(`${chalk.bold.red('Request to ')}${chalk.bold.blue(requests[failure].endpoint)} failed: ${r.results[failure].getFormattedError()}`)
     }
   }

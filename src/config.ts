@@ -1,7 +1,6 @@
 import * as fs from 'fs-extra'
 import * as path from 'path'
 import {PD} from './pd'
-import {AccessToken} from 'simple-oauth2'
 
 const globalAny: any = global
 

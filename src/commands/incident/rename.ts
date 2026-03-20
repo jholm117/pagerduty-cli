@@ -122,7 +122,7 @@ export default class IncidentRename extends AuthenticatedBaseCommand<typeof Inci
 
     const r = await this.pd.batchedRequestWithSpinner(requests, { activityDescription: `Renaming incidents` })
     for (const failure of r.getFailedIndices()) {
-      // eslint-disable-next-line no-console
+       
       console.error(`${chalk.bold.red('Failed to update incident ')}${chalk.bold.blue(requests[failure].data.incident.id)}: ${r.results[failure].getFormattedError()}`)
     }
   }

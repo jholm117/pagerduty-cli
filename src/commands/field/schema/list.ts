@@ -1,8 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../../base/authenticated-base-command'
 import {ux, Flags} from '@oclif/core'
-import chalk from 'chalk'
-import * as utils from '../../../utils'
-import jp from 'jsonpath'
 
 export default class FieldSchemaList extends AuthenticatedBaseCommand<typeof FieldSchemaList> {
   static description = 'List PagerDuty Custom Field Schemas'

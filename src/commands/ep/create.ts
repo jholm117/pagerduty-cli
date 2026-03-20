@@ -64,7 +64,7 @@ export default class EpCreate extends AuthenticatedBaseCommand<typeof EpCreate> 
     }
     if (this.flags.schedule_names) {
       for (const name of this.flags.schedule_names) {
-        // eslint-disable-next-line no-await-in-loop
+         
         const schedule_id = await this.pd.scheduleIDForName(name)
         if (schedule_id === null) {
           this.error(`No schedule was found with the name ${chalk.bold.blue(name)}`, { exit: 1 })
@@ -86,7 +86,7 @@ export default class EpCreate extends AuthenticatedBaseCommand<typeof EpCreate> 
     }
     if (this.flags.user_emails) {
       for (const email of this.flags.user_emails) {
-        // eslint-disable-next-line no-await-in-loop
+         
         const user_id = await this.pd.userIDForEmail(email)
         if (user_id === null) {
           this.error(`No user was found with the email ${chalk.bold.blue(email)}`, { exit: 1 })

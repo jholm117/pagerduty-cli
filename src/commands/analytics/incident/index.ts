@@ -89,7 +89,7 @@ export default class AnalyticsIncident extends AuthenticatedBaseCommand<typeof A
       ux.action.start('Finding teams')
       let teams: any[] = []
       for (const name of this.flags.teams) {
-        // eslint-disable-next-line no-await-in-loop
+         
         const r = await this.pd.fetch('teams', { params: { query: name } })
         teams = [...teams, ...r.map((e: { id: any }) => e.id)]
       }
@@ -105,7 +105,7 @@ export default class AnalyticsIncident extends AuthenticatedBaseCommand<typeof A
       ux.action.start('Finding services')
       let services: any[] = []
       for (const name of this.flags.services) {
-        // eslint-disable-next-line no-await-in-loop
+         
         const r = await this.pd.fetch('services', { params: { query: name } })
         services = [...services, ...r.map((e: { id: any }) => e.id)]
       }

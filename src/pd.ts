@@ -1,7 +1,4 @@
-/* eslint-disable no-console */
-/* eslint-disable complexity */
-/* eslint-disable max-depth */
-/* eslint-disable no-await-in-loop */
+ 
 import axios, {Method} from 'axios'
 import {ux} from '@oclif/core'
 import chalk from 'chalk'
@@ -64,7 +61,7 @@ export class PD {
   }
 
   public static isLegacyToken(token: string): boolean {
-    // eslint-disable-next-line no-useless-escape
+     
     if (token && token.match(/^[0-9a-zA-Z_\-\+\/=]{20}$/)) {
       return true
     }
@@ -437,7 +434,7 @@ export class PD {
       let next_cursor = firstPage.next_cursor
       while (next_cursor && (!p.fetchLimit || fetchedData.length < p.fetchLimit)) {
         getParams = Object.assign({}, getParams, {cursor: next_cursor})
-        // eslint-disable-next-line no-await-in-loop
+         
         r = await this.request({
           endpoint: endpoint,
           method: p.method,
@@ -459,7 +456,7 @@ export class PD {
       while (last && more && (!p.fetchLimit || fetchedData.length < p.fetchLimit)) {
         const data = Object.assign({}, p.data, {starting_after: last})
         // getParams = Object.assign({}, getParams, {cursor: next_cursor})
-        // eslint-disable-next-line no-await-in-loop
+         
         r = await this.request({
           endpoint: endpoint,
           method: p.method,
@@ -482,7 +479,7 @@ export class PD {
       while (more && (!p.fetchLimit || fetchedData.length < p.fetchLimit)) {
         offset += limit
         getParams = Object.assign({}, getParams, {offset: offset})
-        // eslint-disable-next-line no-await-in-loop
+         
         r = await this.request({
           endpoint: endpoint,
           method: p.method,
@@ -547,7 +544,7 @@ export class PD {
     let fetchedData: any[] = []
     for (const name of names) {
       try {
-        // eslint-disable-next-line no-await-in-loop
+         
         const r = await this.fetch(endpoint, {params: {query: name}})
         fetchedData = [...fetchedData, ...r]
       } catch (error) {

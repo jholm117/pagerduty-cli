@@ -93,7 +93,7 @@ export default class EpOncall extends AuthenticatedBaseCommand<typeof EpOncall> 
     })
 
     if (oncalls.length === 0) {
-      // eslint-disable-next-line no-console
+       
       console.error(chalk.bold.red('no oncalls found'))
       this.exit(0)
     }

@@ -153,7 +153,7 @@ export default class UtilDeleteResource extends AuthenticatedBaseCommand<typeof 
       let countdown = 5
       while (countdown > -1) {
         ux.action.start(`Warning: util deleteresource running in ${chalk.bold.red('extreme danger mode')}!\nHit ${chalk.bold.blue('Ctrl-C')} if you don't want to delete ${things_to_delete_str}.\nStarting in ${chalk.bold(String(countdown) + ' seconds')}`)
-        // eslint-disable-next-line no-await-in-loop
+         
         await ux.wait(1000)
         countdown--
       }
@@ -162,7 +162,7 @@ export default class UtilDeleteResource extends AuthenticatedBaseCommand<typeof 
       const confirm_str = `Yes, delete ${things_to_delete_str}`
       const ok = await ux.prompt(chalk.bold.red(`About to delete ${chalk.bold(things_to_delete_str)}. Are you absolutely sure?\nType '${chalk.bold.blue(confirm_str)}' to confirm`), { default: 'nope' })
       if (ok !== confirm_str) {
-        // eslint-disable-next-line no-console
+         
         console.warn(`OK, doing nothing... ${chalk.bold.green('done')}`)
         this.exit(0)
       }
@@ -183,7 +183,7 @@ export default class UtilDeleteResource extends AuthenticatedBaseCommand<typeof 
     })
 
     for (const failure of r.getFailedIndices()) {
-      // eslint-disable-next-line no-console
+       
       const resource_id = requests[failure].endpoint.split('/').pop()
       console.error(`${chalk.bold.red(`Failed to delete ${this.flags['resource-type']} `)}${chalk.bold.blue(resource_id)}: ${r.results[failure].getFormattedError()}`)
     }

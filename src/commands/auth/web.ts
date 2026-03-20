@@ -132,7 +132,6 @@ export default class AuthWeb extends BaseCommand<typeof AuthWeb> {
     this.server.on('connection', this.trackConnectionSocket.bind(this))
 
     this.server.on('request', async (req, res) => {
-      // eslint-disable-next-line node/no-unsupported-features/node-builtins
       const urlParts = new URL(req.url as string, `http://${req.headers.host}`)
       if (
         urlParts.pathname === '/callback' &&

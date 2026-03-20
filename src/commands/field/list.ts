@@ -1,9 +1,6 @@
 // import { ListBaseCommand } from '../../base/list-base-command'
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
 import {ux, Flags} from '@oclif/core'
-import chalk from 'chalk'
-import * as utils from '../../utils'
-import jp from 'jsonpath'
 
 export default class FieldList extends AuthenticatedBaseCommand<typeof FieldList> {
   static description = 'List PagerDuty Custom Fields'

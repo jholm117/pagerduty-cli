@@ -46,7 +46,7 @@ export default class UserDelete extends AuthenticatedBaseCommand<typeof UserDele
     if (this.flags.exact_emails) {
       ux.action.start('Getting user IDs from PD')
       for (const email of this.flags.exact_emails) {
-        // eslint-disable-next-line no-await-in-loop
+         
         const user_id = await this.pd.userIDForEmail(email)
         if (user_id) user_ids = [...new Set([...user_ids, user_id])]
       }
@@ -76,7 +76,7 @@ export default class UserDelete extends AuthenticatedBaseCommand<typeof UserDele
       let countdown = 5
       while (countdown > -1) {
         ux.action.start(`Warning: user:delete running in ${chalk.bold.red('extreme danger mode')}!\nHit ${chalk.bold.blue('Ctrl-C')} if you don't want to delete ${things_to_delete_str}.\nStarting in ${chalk.bold(String(countdown) + ' seconds')}`)
-        // eslint-disable-next-line no-await-in-loop
+         
         await ux.wait(1000)
         countdown--
       }
@@ -85,7 +85,7 @@ export default class UserDelete extends AuthenticatedBaseCommand<typeof UserDele
       const confirm_str = `Yes, delete ${things_to_delete_str}`
       const ok = await ux.prompt(chalk.bold.red(`About to delete ${chalk.bold(things_to_delete_str)}. Are you absolutely sure?\nType '${chalk.bold.blue(confirm_str)}' to confirm`), { default: 'nope' })
       if (ok !== confirm_str) {
-        // eslint-disable-next-line no-console
+         
         console.warn(`OK, doing nothing... ${chalk.bold.green('done')}`)
         this.exit(0)
       }
@@ -105,7 +105,7 @@ export default class UserDelete extends AuthenticatedBaseCommand<typeof UserDele
     })
 
     for (const failure of r.getFailedIndices()) {
-      // eslint-disable-next-line no-console
+       
       console.error(`${chalk.bold.red('Failed to delete user ')}${chalk.bold.blue(requests[failure].data.user.id)}: ${r.results[failure].getFormattedError()}`)
     }
   }

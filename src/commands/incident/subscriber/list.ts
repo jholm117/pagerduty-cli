@@ -3,7 +3,6 @@ import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import getStream from 'get-stream'
 import * as utils from '../../../utils'
-import { PD } from '../../../pd'
 
 export default class IncidentSubscriberList extends AuthenticatedBaseCommand<typeof IncidentSubscriberList> {
   static description = 'List Responders on PagerDuty Incidents'

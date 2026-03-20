@@ -127,7 +127,7 @@ export default class IncidentResponderAdd extends AuthenticatedBaseCommand<typeo
     if (this.flags.user_emails) {
       for (const user_email of this.flags.user_emails) {
         ux.action.start(`Finding user ID for ${chalk.bold.blue(user_email)}`)
-        // eslint-disable-next-line no-await-in-loop
+         
         const user_id = await this.pd.userIDForEmail(user_email)
         if (!user_id) {
           this.error(`No user or multiple users found for email ${user_email}`, { exit: 1 })
@@ -159,7 +159,7 @@ export default class IncidentResponderAdd extends AuthenticatedBaseCommand<typeo
     if (this.flags.ep_names) {
       for (const ep_name of this.flags.ep_names) {
         ux.action.start(`Finding EP ID for ${chalk.bold.blue(ep_name)}`)
-        // eslint-disable-next-line no-await-in-loop
+         
         const ep_id = await this.pd.epIDForName(ep_name)
         if (!ep_id) {
           this.error(`No EP or multiple EPs found for name ${ep_name}`, { exit: 1 })
@@ -225,7 +225,7 @@ export default class IncidentResponderAdd extends AuthenticatedBaseCommand<typeo
     }
     const r = await this.pd.batchedRequestWithSpinner(requests, { activityDescription: `Adding responder requests for ${incident_ids.length} incidents` })
     for (const failure of r.getFailedIndices()) {
-      // eslint-disable-next-line no-console
+       
       console.error(`${chalk.bold.red('Failed to add responders to incident ')}${chalk.bold.blue(r.requests[failure].endpoint.split('/')[1])}: ${r.results[failure].getFormattedError()}`)
     }
   }

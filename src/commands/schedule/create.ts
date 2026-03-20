@@ -85,7 +85,7 @@ export default class ScheduleCreate extends AuthenticatedBaseCommand<typeof Sche
       }
     }
     for (const userEmail of userEmails) {
-      // eslint-disable-next-line no-await-in-loop
+       
       const userID = await this.pd.userIDForEmail(userEmail)
       if (userID === null) {
         this.error(`${chalk.bold.blue(userEmail)} is not the ID or email of a user in your PagerDuty domain`, { exit: 1 })

@@ -3,7 +3,6 @@ import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import getStream from 'get-stream'
 import * as utils from '../../../utils'
-import { PD } from '../../../pd'
 
 export default class IncidentSubscriberRemove extends AuthenticatedBaseCommand<typeof IncidentSubscriberRemove> {
   static description = 'Remove Subscribers from PagerDuty Incidents'
@@ -99,7 +98,7 @@ export default class IncidentSubscriberRemove extends AuthenticatedBaseCommand<t
     if (this.flags.user_emails) {
       for (const user_email of this.flags.user_emails) {
         ux.action.start(`Finding user ID for ${chalk.bold.blue(user_email)}`)
-        // eslint-disable-next-line no-await-in-loop
+         
         const user_id = await this.pd.userIDForEmail(user_email)
         if (!user_id) {
           this.error(`No user or multiple users found for email ${user_email}`, { exit: 1 })
@@ -119,7 +118,7 @@ export default class IncidentSubscriberRemove extends AuthenticatedBaseCommand<t
     if (this.flags.team_names) {
       for (const team_name of this.flags.team_names) {
         ux.action.start(`Finding team ID for ${chalk.bold.blue(team_name)}`)
-        // eslint-disable-next-line no-await-in-loop
+         
         const team_id = await this.pd.teamIDForName(team_name)
         if (!team_id) {
           this.error(`No team or multiple teams found for name ${team_name}`, { exit: 1 })
@@ -151,7 +150,7 @@ export default class IncidentSubscriberRemove extends AuthenticatedBaseCommand<t
 
     const r = await this.pd.batchedRequestWithSpinner(requests, { activityDescription: `Removing ${subscribers.length} subscribers from ${incident_ids.length} incidents` })
     for (const failure of r.getFailedIndices()) {
-      // eslint-disable-next-line no-console
+       
       console.error(`${chalk.bold.red('Failed to remove subscribers from incident ')}${chalk.bold.blue(r.requests[failure].endpoint.split('/')[1])}: ${r.results[failure].getFormattedError()}`)
     }
     for (const [idx, data] of r.getDatas().entries()) {

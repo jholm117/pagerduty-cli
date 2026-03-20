@@ -28,7 +28,7 @@ export default class ServiceList extends ListBaseCommand<typeof ServiceList> {
       ux.action.start('Finding teams')
       let teams: any[] = []
       for (const name of this.flags.teams) {
-        // eslint-disable-next-line no-await-in-loop
+         
         const r = await this.pd.fetch('teams', { params: { query: name } })
         teams = [...teams, ...r]
       }
