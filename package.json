@@ -6,7 +6,7 @@
   "bin": {
     "pd": "bin/run"
   },
-  "bugs": "https://github.com/martindstone/pagerduty-cli/issues",
+  "bugs": "https://github.com/jholm117/pagerduty-cli/issues",
   "dependencies": {
     "@oclif/core": "^3.27.0",
     "@oclif/plugin-autocomplete": "^3.2.41",
@@ -51,10 +51,9 @@
   "files": [
     "/bin",
     "/lib",
-    "/npm-shrinkwrap.json",
     "/oclif.manifest.json"
   ],
-  "homepage": "https://github.com/martindstone/pagerduty-cli",
+  "homepage": "https://github.com/jholm117/pagerduty-cli",
   "keywords": [
     "oclif"
   ],
@@ -170,12 +169,9 @@
       "util": {
         "description": "Utility commands"
       }
-    },
-    "macos": {
-      "identifier": "com.pagerduty.cli"
     }
   },
-  "repository": "martindstone/pagerduty-cli",
+  "repository": "jholm117/pagerduty-cli",
   "scripts": {
     "postpack": "rm -f oclif.manifest.json",
     "posttest": "eslint src/",
