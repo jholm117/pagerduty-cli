@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import getStream from 'get-stream'
 import * as utils from '../../utils'
@@ -40,7 +40,7 @@ export default class IncidentAlerts extends AuthenticatedBaseCommand<typeof Inci
       description: 'Delimiter for fields that have more than one value',
       default: '\\n',
     }),
-    ...CliUx.ux.table.flags(),
+    ...ux.table.flags(),
   }
 
   public async init(): Promise<void> {
@@ -93,7 +93,7 @@ export default class IncidentAlerts extends AuthenticatedBaseCommand<typeof Inci
       })
       alerts = [...alerts, ...r]
     }
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
     if (alerts.length === 0) {
       this.error('No incidents found', { exit: 0 })
     }

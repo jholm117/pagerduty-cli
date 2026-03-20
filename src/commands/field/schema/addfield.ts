@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../../base/authenticated-base-command'
-import {CliUx, Flags} from '@oclif/core'
+import {ux, Flags} from '@oclif/core'
 import chalk from 'chalk'
 
 export default class FieldSchemaAddField extends AuthenticatedBaseCommand<typeof FieldSchemaAddField> {
@@ -56,7 +56,7 @@ export default class FieldSchemaAddField extends AuthenticatedBaseCommand<typeof
     }
     const field = r.getData()
 
-    CliUx.ux.action.start('Getting schema field configurations')
+    ux.action.start('Getting schema field configurations')
     r = await this.pd.request({
       endpoint: `customfields/schemas/${schema_id}`,
       method: 'GET',
@@ -66,10 +66,10 @@ export default class FieldSchemaAddField extends AuthenticatedBaseCommand<typeof
       headers,
     })
     if (r.isFailure) {
-      CliUx.ux.action.stop(chalk.bold.red('failed!'))
+      ux.action.stop(chalk.bold.red('failed!'))
       this.error(`Failed to get schema ${schema_id}`, {exit: 1})
     }
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
 
     const schema = r.getData().schema
     const field_configurations = schema.field_configurations
@@ -124,7 +124,7 @@ export default class FieldSchemaAddField extends AuthenticatedBaseCommand<typeof
       }
     }
 
-    CliUx.ux.action.start(`Adding field ${chalk.bold.blue(field.field.name)} to PagerDuty field schema ${chalk.bold.blue(schema_id)}`)
+    ux.action.start(`Adding field ${chalk.bold.blue(field.field.name)} to PagerDuty field schema ${chalk.bold.blue(schema_id)}`)
     r = await this.pd.request({
       endpoint: `customfields/schemas/${schema_id}`,
       method: 'PUT',
@@ -132,9 +132,9 @@ export default class FieldSchemaAddField extends AuthenticatedBaseCommand<typeof
       headers,
     })
     if (r.isFailure) {
-      CliUx.ux.action.stop(chalk.bold.red('failed!'))
+      ux.action.stop(chalk.bold.red('failed!'))
       this.error(`Failed to add field to schema: ${r.getFormattedError()}`, {exit: 1})
     }
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
   }
 }

@@ -1,4 +1,4 @@
-import { Command, Flags, Interfaces, CliUx } from '@oclif/core'
+import { Command, Flags, Interfaces, ux } from '@oclif/core'
 import { BaseCommand } from './base-command'
 import { Config, ConfigSubdomain, CLIENT_ID, CLIENT_SECRET } from '../config'
 import { PD } from '../pd'
@@ -35,7 +35,7 @@ export abstract class AuthenticatedBaseCommand<T extends typeof Command> extends
       return false
     }
 
-    CliUx.ux.action.start(`Token for ${chalk.bold.blue(subdomain)} has expired, refreshing`)
+    ux.action.start(`Token for ${chalk.bold.blue(subdomain)} has expired, refreshing`)
     const client = new AuthorizationCode({
       client: {
         id: CLIENT_ID,
@@ -56,10 +56,10 @@ export abstract class AuthenticatedBaseCommand<T extends typeof Command> extends
       const configSubdomain = await Config.configForTokenResponseBody(newToken, configAlias)
       this._config.put(configSubdomain)
       this._config.save()
-      CliUx.ux.action.stop(chalk.bold.green('done'))
+      ux.action.stop(chalk.bold.green('done'))
       return true
     } catch (error) {
-      CliUx.ux.action.stop(chalk.bold.red('failed! ' + error))
+      ux.action.stop(chalk.bold.red('failed! ' + error))
     }
     return false
   }

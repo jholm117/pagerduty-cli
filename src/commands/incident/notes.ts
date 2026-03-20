@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 
 export default class IncidentNotes extends AuthenticatedBaseCommand<typeof IncidentNotes> {
@@ -14,13 +14,13 @@ export default class IncidentNotes extends AuthenticatedBaseCommand<typeof Incid
     note: Flags.string({
       char: 'n',
       description: 'Note to add',
-      exclusive: [...Object.keys(CliUx.ux.table.flags())],
+      exclusive: [...Object.keys(ux.table.flags())],
     }),
     from: Flags.string({
       char: 'F',
       description: 'Login email of a PD user account for the "From:" header. Use only with legacy API tokens.',
     }),
-    ...CliUx.ux.table.flags(),
+    ...ux.table.flags(),
   }
 
   async run() {
@@ -31,7 +31,7 @@ export default class IncidentNotes extends AuthenticatedBaseCommand<typeof Incid
 
     if (this.flags.note) {
       // add a note
-      CliUx.ux.action.start(`Adding a note to incident ${chalk.bold.blue(this.flags.id)}`)
+      ux.action.start(`Adding a note to incident ${chalk.bold.blue(this.flags.id)}`)
       const body = {
         note: {
           content: this.flags.note,
@@ -46,13 +46,13 @@ export default class IncidentNotes extends AuthenticatedBaseCommand<typeof Incid
       if (r.isFailure) this.error(`Failed to add note: ${r.getFormattedError()}`)
       const note = r.getData()
       if (note && note.note && note.note.id) {
-        CliUx.ux.action.stop(chalk.bold.green('done'))
+        ux.action.stop(chalk.bold.green('done'))
       } else {
-        CliUx.ux.action.stop(chalk.bold.red('failed!'))
+        ux.action.stop(chalk.bold.red('failed!'))
       }
     } else {
       // get notes
-      CliUx.ux.action.start(`Getting notes for incident ${chalk.bold.blue(this.flags.id)}`)
+      ux.action.start(`Getting notes for incident ${chalk.bold.blue(this.flags.id)}`)
       const notes = await this.pd.fetchWithSpinner(`incidents/${this.flags.id}/notes`, {
         activityDescription: `Getting notes for incident ${chalk.bold.blue(this.flags.id)}`,
       })

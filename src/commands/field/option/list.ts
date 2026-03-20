@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../../base/authenticated-base-command'
-import {CliUx, Flags} from '@oclif/core'
+import {ux, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import * as utils from '../../../utils'
 import jp from 'jsonpath'
@@ -28,7 +28,7 @@ export default class FieldOptionList extends AuthenticatedBaseCommand<typeof Fie
       description: 'Print field option ID\'s only to stdout, for use with pipes.',
       exclusive: ['columns', 'sort', 'csv', 'extended', 'json'],
     }),
-    ...CliUx.ux.table.flags(),
+    ...ux.table.flags(),
   }
 
   async run() {
@@ -45,7 +45,7 @@ export default class FieldOptionList extends AuthenticatedBaseCommand<typeof Fie
       'X-EARLY-ACCESS': 'flex-service-early-access',
     }
 
-    CliUx.ux.action.start(`Getting field details from PD`)
+    ux.action.start(`Getting field details from PD`)
     let r = await this.pd.request({
       endpoint: `customfields/fields/${id}`,
       method: 'GET',

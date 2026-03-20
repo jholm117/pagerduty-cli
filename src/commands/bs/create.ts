@@ -1,7 +1,8 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import * as utils from '../../utils'
+import open from 'open'
 
 export default class BsCreate extends AuthenticatedBaseCommand<typeof BsCreate> {
   static description = 'Create a PagerDuty Business Service'
@@ -84,17 +85,17 @@ export default class BsCreate extends AuthenticatedBaseCommand<typeof BsCreate> 
       },
     }
 
-    CliUx.ux.action.start('Creating a PagerDuty business service')
+    ux.action.start('Creating a PagerDuty business service')
     const r = await this.pd.request({
       endpoint: 'business_services',
       method: 'POST',
       data: business_service,
     })
     if (r.isFailure) {
-      CliUx.ux.action.stop(chalk.bold.red('failed!'))
+      ux.action.stop(chalk.bold.red('failed!'))
       this.error(`Failed to create business service: ${r.getFormattedError()}`, {exit: 1})
     }
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
     const returned_bs = r.getData()
 
     if (this.flags.pipe) {
@@ -102,15 +103,15 @@ export default class BsCreate extends AuthenticatedBaseCommand<typeof BsCreate> 
     } else if (this.flags.open) {
       const domain = await this.pd.domain()
       const url = `https://${domain}.pagerduty.com/business-services/${returned_bs.business_service.id}`
-      await CliUx.ux.wait(1000)
-      CliUx.ux.action.start(`Opening ${chalk.bold.blue(url)} in the browser`)
+      await ux.wait(1000)
+      ux.action.start(`Opening ${chalk.bold.blue(url)} in the browser`)
       try {
-        await CliUx.ux.open(url)
+        await open(url)
       } catch (error) {
-        CliUx.ux.action.stop(chalk.bold.red('failed!'))
+        ux.action.stop(chalk.bold.red('failed!'))
         this.error('Couldn\'t open your browser. Are you running as root?', { exit: 1 })
       }
-      CliUx.ux.action.stop(chalk.bold.green('done'))
+      ux.action.stop(chalk.bold.green('done'))
     } else {
       const domain = await this.pd.domain()
       const url = `https://${domain}.pagerduty.com/business-services/${returned_bs.business_service.id}`

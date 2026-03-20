@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import {CliUx, Flags} from '@oclif/core'
+import {ux, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import getStream from 'get-stream'
 import * as utils from '../../utils'
@@ -47,13 +47,13 @@ export default class IncidentPriority extends AuthenticatedBaseCommand<typeof In
 
       const params = {user_ids: [me.user.id]}
 
-      CliUx.ux.action.start('Getting incidents from PD')
+      ux.action.start('Getting incidents from PD')
       const incidents = await this.pd.fetch('incidents', {params: params})
       if (incidents.length === 0) {
-        CliUx.ux.action.stop(chalk.bold.red('none found'))
+        ux.action.stop(chalk.bold.red('none found'))
         return
       }
-      CliUx.ux.action.stop(`got ${incidents.length}`)
+      ux.action.stop(`got ${incidents.length}`)
       incident_ids = incidents.map((e: { id: any }) => e.id)
     } else if (this.flags.ids) {
       incident_ids = utils.splitDedupAndFlatten(this.flags.ids)
@@ -69,21 +69,21 @@ export default class IncidentPriority extends AuthenticatedBaseCommand<typeof In
       this.error(`Invalid incident ID's: ${invalid_ids.join(', ')}`, {exit: 1})
     }
 
-    CliUx.ux.action.start('Getting incident priorities from PD')
+    ux.action.start('Getting incident priorities from PD')
     const priorities_map = await this.pd.getPrioritiesMapByName()
     if (Object.keys(priorities_map).length === 0) {
-      CliUx.ux.action.stop(chalk.bold.red('none found'))
+      ux.action.stop(chalk.bold.red('none found'))
       this.error('No incident priorities were found. Is the priority feature enabled?', {exit: 1})
     }
 
     if (!(this.flags.priority in priorities_map)) {
-      CliUx.ux.action.stop('failed!')
+      ux.action.stop('failed!')
       this.error(`No incident priority matches name ${this.flags.priority}`, {exit: 1})
     }
 
     const priority_id = priorities_map[this.flags.priority].id
     const requests: any[] = []
-    CliUx.ux.action.start(`Setting priority ${chalk.bold.blue(`${this.flags.priority} (${priority_id})`)} on incident(s) ${chalk.bold.blue(incident_ids.join(', '))}`)
+    ux.action.start(`Setting priority ${chalk.bold.blue(`${this.flags.priority} (${priority_id})`)} on incident(s) ${chalk.bold.blue(incident_ids.join(', '))}`)
     for (const incident_id of incident_ids) {
       const body = {
         incident: {

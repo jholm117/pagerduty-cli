@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import getStream from 'get-stream'
 import * as utils from '../../utils'
@@ -48,12 +48,12 @@ export default class UserReplace extends AuthenticatedBaseCommand<typeof UserRep
     if (this.flags.force) {
       let countdown = 5
       while (countdown > -1) {
-        CliUx.ux.action.start(`Warning: user:replace running in ${chalk.bold.red('extreme danger mode')}, hit Ctrl-C to abort, starting in ${chalk.bold(String(countdown))}`)
+        ux.action.start(`Warning: user:replace running in ${chalk.bold.red('extreme danger mode')}, hit Ctrl-C to abort, starting in ${chalk.bold(String(countdown))}`)
         // eslint-disable-next-line no-await-in-loop
-        await CliUx.ux.wait(1000)
+        await ux.wait(1000)
         countdown--
       }
-      CliUx.ux.action.stop(chalk.bold.green('ok'))
+      ux.action.stop(chalk.bold.green('ok'))
     }
 
     let user_ids: string[] = []
@@ -218,7 +218,7 @@ export default class UserReplace extends AuthenticatedBaseCommand<typeof UserRep
     }
 
     if (!this.flags.force) {
-      const ok = await CliUx.ux.prompt(chalk.bold.red(`About to update ${schedule_requests.length} schedules and ${ep_requests.length} escalation policies. Are you absolutely sure?\nType '${chalk.bold.blue(replacement_user_id)}' to confirm`), { default: 'nope' })
+      const ok = await ux.prompt(chalk.bold.red(`About to update ${schedule_requests.length} schedules and ${ep_requests.length} escalation policies. Are you absolutely sure?\nType '${chalk.bold.blue(replacement_user_id)}' to confirm`), { default: 'nope' })
       if (ok !== replacement_user_id) {
         // eslint-disable-next-line no-console
         console.warn(`OK, doing nothing... ${chalk.bold.green('done')}`)

@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import * as utils from '../../../utils'
 
@@ -71,7 +71,7 @@ export default class FieldOptionCreate extends AuthenticatedBaseCommand<typeof F
       this.error(`Invalid PagerDuty ID ${chalk.bold.blue(id)}`, {exit: 1})
     }
 
-    CliUx.ux.action.start(`Getting field details from PD`)
+    ux.action.start(`Getting field details from PD`)
     let r = await this.pd.request({
       endpoint: `customfields/fields/${id}`,
       method: 'GET',
@@ -105,7 +105,7 @@ export default class FieldOptionCreate extends AuthenticatedBaseCommand<typeof F
       }
     }
 
-    CliUx.ux.action.start('Creating PagerDuty field option')
+    ux.action.start('Creating PagerDuty field option')
     r = await this.pd.request({
       endpoint: `customfields/fields/${id}/field_options`,
       method: 'POST',
@@ -115,7 +115,7 @@ export default class FieldOptionCreate extends AuthenticatedBaseCommand<typeof F
     if (r.isFailure) {
       this.error(`Failed to create field option: ${r.getFormattedError()}`, {exit: 1})
     }
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
     const returned_field = r.getData()
 
     if (pipe) {

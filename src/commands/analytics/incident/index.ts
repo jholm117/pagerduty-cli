@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import * as chrono from 'chrono-node'
 
@@ -56,7 +56,7 @@ export default class AnalyticsIncident extends AuthenticatedBaseCommand<typeof A
       description: 'Delimiter for fields that have more than one value',
       default: '\\n',
     }),
-    ...CliUx.ux.table.flags(),
+    ...ux.table.flags(),
   }
 
   public async init(): Promise<void> {
@@ -86,7 +86,7 @@ export default class AnalyticsIncident extends AuthenticatedBaseCommand<typeof A
     }
 
     if (this.flags.teams) {
-      CliUx.ux.action.start('Finding teams')
+      ux.action.start('Finding teams')
       let teams: any[] = []
       for (const name of this.flags.teams) {
         // eslint-disable-next-line no-await-in-loop
@@ -95,14 +95,14 @@ export default class AnalyticsIncident extends AuthenticatedBaseCommand<typeof A
       }
       const team_ids = [...new Set(teams)]
       if (team_ids.length === 0) {
-        CliUx.ux.action.stop(chalk.bold.red('none found'))
+        ux.action.stop(chalk.bold.red('none found'))
         this.error('No teams found. Please check your search.', { exit: 1 })
       }
       data.filters.team_ids = team_ids
     }
 
     if (this.flags.services) {
-      CliUx.ux.action.start('Finding services')
+      ux.action.start('Finding services')
       let services: any[] = []
       for (const name of this.flags.services) {
         // eslint-disable-next-line no-await-in-loop
@@ -111,7 +111,7 @@ export default class AnalyticsIncident extends AuthenticatedBaseCommand<typeof A
       }
       const service_ids = [...new Set(services)]
       if (service_ids.length === 0) {
-        CliUx.ux.action.stop(chalk.bold.red('none found'))
+        ux.action.stop(chalk.bold.red('none found'))
         this.error('No services found. Please check your search.', { exit: 1 })
       }
       data.filters.service_ids = service_ids

@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import * as utils from '../../utils'
 import * as chrono from 'chrono-node'
@@ -49,7 +49,7 @@ export default class UserOncall extends AuthenticatedBaseCommand<typeof UserOnca
       description: 'output full details as JSON',
       exclusive: ['columns', 'filter', 'sort', 'csv', 'extended'],
     }),
-    ...CliUx.ux.table.flags(),
+    ...ux.table.flags(),
   }
 
   public async init(): Promise<void> {
@@ -72,14 +72,14 @@ export default class UserOncall extends AuthenticatedBaseCommand<typeof UserOnca
       }
       userID = this.flags.id
     } else if (this.flags.email) {
-      CliUx.ux.action.start(`Finding PD user ${chalk.bold.blue(this.flags.email)}`)
+      ux.action.start(`Finding PD user ${chalk.bold.blue(this.flags.email)}`)
       userID = await this.pd.userIDForEmail(this.flags.email)
       if (!userID) {
-        CliUx.ux.action.stop(chalk.bold.red('failed!'))
+        ux.action.stop(chalk.bold.red('failed!'))
         this.error(`No user was found for the email "${this.flags.email}"`, { exit: 1 })
       }
     } else if (this.flags.me) {
-      CliUx.ux.action.start('Finding your PD user ID')
+      ux.action.start('Finding your PD user ID')
       const me = await this.me(true)
       userID = me.user.id
     } else {
@@ -111,10 +111,10 @@ export default class UserOncall extends AuthenticatedBaseCommand<typeof UserOnca
     }
 
     if (oncalls.length === 0) {
-      CliUx.ux.action.stop(chalk.bold.red('none found'))
+      ux.action.stop(chalk.bold.red('none found'))
       this.exit(0)
     }
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
 
     if (this.flags.json) {
       await this.printJsonAndExit(oncalls)

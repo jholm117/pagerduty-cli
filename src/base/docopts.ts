@@ -1,6 +1,6 @@
-import { Interfaces } from '@oclif/core'
+import { Command } from '@oclif/core'
 
-type Flag = Interfaces.Command.Flag
+type Flag = Command.Flag.Cached & { name: string }
 type Flags = Flag[]
 
 // Modded copy of help/docopts.ts to work around weird behavior
@@ -10,18 +10,19 @@ export class DocOpts {
 
   public flagList: Flags
 
-  public constructor(private cmd: Interfaces.Command) {
+  public constructor(private cmd: Command.Cached) {
     // Create a new map with references to the flags that we can manipulate.
     this.flagMap = {}
     this.flagList = Object.entries(cmd.flags || {})
       .filter(([_, flag]) => !flag.hidden)
       .map(([name, flag]) => {
-        this.flagMap[name] = flag
-        return { ...flag, name: name }
+        const f = { ...flag, name } as Flag
+        this.flagMap[name] = f
+        return f
       })
   }
 
-  public static generate(cmd: Interfaces.Command): string {
+  public static generate(cmd: Command.Cached): string {
     const docopts = new DocOpts(cmd)
     const elementMap = {}
 
@@ -39,7 +40,7 @@ export class DocOpts {
       // not all flags have short names
       const flagName = flag.char ? `-${flag.char}` : `--${flag.name}`
       if (flag.type === 'option') {
-        type = flag.options ? ` ${flag.options.join('|')}` : ' <value>'
+        type = (flag as any).options ? ` ${(flag as any).options.join('|')}` : ' <value>'
       }
 
       const element = `${flagName}${type}`

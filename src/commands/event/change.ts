@@ -1,6 +1,6 @@
 import { BaseCommand } from '../../base/base-command'
 import axios, { Method } from 'axios'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import * as utils from '../../utils'
 import * as chrono from 'chrono-node'
@@ -136,7 +136,7 @@ export default class EventChange extends BaseCommand<typeof EventChange> {
       }
     }
 
-    CliUx.ux.action.start('Sending change event to PagerDuty')
+    ux.action.start('Sending change event to PagerDuty')
     const config = {
       method: 'POST',
       headers: {
@@ -149,7 +149,7 @@ export default class EventChange extends BaseCommand<typeof EventChange> {
     try {
       r = await axios.request(config)
     } catch (e: any) {
-      CliUx.ux.action.stop(chalk.bold.red('failed!'))
+      ux.action.stop(chalk.bold.red('failed!'))
       let errorStr = `${e.response.status} ${e.response.statusText}`
       if (e.response.data) {
         if (typeof e.response.data == 'string') {
@@ -161,7 +161,7 @@ export default class EventChange extends BaseCommand<typeof EventChange> {
       this.error(errorStr, { exit: 1 })
     }
 
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
 
     if (json) {
       await this.printJsonAndExit(r.data)

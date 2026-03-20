@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../../../base/authenticated-base-command'
-import {CliUx, Flags} from '@oclif/core'
+import {ux, Flags} from '@oclif/core'
 import chalk from 'chalk'
 
 export default class FieldSchemaAssignmentList extends AuthenticatedBaseCommand<typeof FieldSchemaAssignmentList> {
@@ -31,7 +31,7 @@ export default class FieldSchemaAssignmentList extends AuthenticatedBaseCommand<
       description: 'Delimiter for fields that have more than one value',
       default: '\n',
     }),
-    ...CliUx.ux.table.flags(),
+    ...ux.table.flags(),
   }
 
   async run() {
@@ -101,7 +101,7 @@ export default class FieldSchemaAssignmentList extends AuthenticatedBaseCommand<
       schema_assignments.push(...r)
     }
 
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
 
     if (schema_assignments.length === 0) {
       this.error('No schema assignments found.', {exit: 1})

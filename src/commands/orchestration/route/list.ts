@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../../base/authenticated-base-command'
-import { Flags, CliUx } from '@oclif/core'
+import { Flags, ux } from '@oclif/core'
 import chalk from 'chalk'
 
 export default class OrchestrationRouteList extends AuthenticatedBaseCommand<typeof OrchestrationRouteList> {
@@ -31,7 +31,7 @@ export default class OrchestrationRouteList extends AuthenticatedBaseCommand<typ
       description: 'Delimiter for fields that have more than one value',
       default: '\\n',
     }),
-    ...CliUx.ux.table.flags(),
+    ...ux.table.flags(),
   }
 
   public async init(): Promise<void> {
@@ -45,7 +45,7 @@ export default class OrchestrationRouteList extends AuthenticatedBaseCommand<typ
   }
 
   async run() {
-    CliUx.ux.action.start(
+    ux.action.start(
       `Getting routes for orchestration ${chalk.bold.blue(this.flags.id)}`
     )
     const r = await this.pd.request({
@@ -53,7 +53,7 @@ export default class OrchestrationRouteList extends AuthenticatedBaseCommand<typ
     })
 
     if (r.isFailure) {
-      CliUx.ux.action.stop(chalk.bold.red('failed!'))
+      ux.action.stop(chalk.bold.red('failed!'))
       this.error(
         `${chalk.bold.red('Failed to get orchestration ')}${chalk.bold.blue(
           this.flags.id
@@ -61,7 +61,7 @@ export default class OrchestrationRouteList extends AuthenticatedBaseCommand<typ
         { exit: 1 }
       )
     }
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
 
     const orchestration = r.getData()
 

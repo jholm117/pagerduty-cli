@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 
 export default class RestPut extends AuthenticatedBaseCommand<typeof RestPut> {
@@ -70,7 +70,7 @@ export default class RestPut extends AuthenticatedBaseCommand<typeof RestPut> {
       this.error(`Error parsing request body: ${(error as any).message}`, { exit: 1 })
     }
 
-    CliUx.ux.action.start('Talking to PD')
+    ux.action.start('Talking to PD')
     const response = await this.pd.request({
       endpoint: this.flags.endpoint,
       method: 'PUT',
@@ -80,10 +80,10 @@ export default class RestPut extends AuthenticatedBaseCommand<typeof RestPut> {
     })
 
     if (response.isFailure) {
-      CliUx.ux.action.stop(chalk.bold.red('failed!'))
+      ux.action.stop(chalk.bold.red('failed!'))
       this.error(`Request failed: ${response.getFormattedError()}`)
     }
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
     await this.printJsonAndExit(response.getData())
   }
 }

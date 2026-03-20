@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 
 export default class TagList extends AuthenticatedBaseCommand<typeof TagList> {
@@ -45,7 +45,7 @@ export default class TagList extends AuthenticatedBaseCommand<typeof TagList> {
       description: 'Delimiter for fields that have more than one value',
       default: '\\n',
     }),
-    ...CliUx.ux.table.flags(),
+    ...ux.table.flags(),
   }
 
   public async init(): Promise<void> {
@@ -62,7 +62,7 @@ export default class TagList extends AuthenticatedBaseCommand<typeof TagList> {
     const { names, ids, types } = this.flags
 
     if (names.length > 0) {
-      CliUx.ux.action.start(`Finding IDs for ${names.length} tags`)
+      ux.action.start(`Finding IDs for ${names.length} tags`)
       for (const remove_name of names) {
         const remove_id = await this.pd.tagIDForName(remove_name)
         if (remove_id) {
@@ -71,7 +71,7 @@ export default class TagList extends AuthenticatedBaseCommand<typeof TagList> {
           this.warn(`No tag was found with the name ${chalk.bold.blue(remove_name)}`)
         }
       }
-      CliUx.ux.action.stop(chalk.bold.green('done'))
+      ux.action.stop(chalk.bold.green('done'))
     }
 
     if (ids.length === 0) {
@@ -79,7 +79,7 @@ export default class TagList extends AuthenticatedBaseCommand<typeof TagList> {
     }
 
     let rows: any[] = []
-    CliUx.ux.action.start('Getting objects from PD...')
+    ux.action.start('Getting objects from PD...')
     for (const tag_id of ids) {
       for (const type of types) {
         const r = await this.pd.fetch(`tags/${tag_id}/${type}`)
@@ -91,7 +91,7 @@ export default class TagList extends AuthenticatedBaseCommand<typeof TagList> {
         })]
       }
     }
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
 
     if (rows.length === 0) {
       this.error('No objects found.', { exit: 1 })

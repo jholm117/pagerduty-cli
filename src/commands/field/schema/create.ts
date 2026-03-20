@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../../base/authenticated-base-command'
-import {CliUx, Flags} from '@oclif/core'
+import {ux, Flags} from '@oclif/core'
 import chalk from 'chalk'
 
 export default class FieldSchemaCreate extends AuthenticatedBaseCommand<typeof FieldSchemaCreate> {
@@ -39,7 +39,7 @@ export default class FieldSchemaCreate extends AuthenticatedBaseCommand<typeof F
       }
     }
 
-    CliUx.ux.action.start('Creating PagerDuty field schema')
+    ux.action.start('Creating PagerDuty field schema')
     const r = await this.pd.request({
       endpoint: 'customfields/schemas',
       method: 'POST',
@@ -49,7 +49,7 @@ export default class FieldSchemaCreate extends AuthenticatedBaseCommand<typeof F
     if (r.isFailure) {
       this.error(`Failed to create schema: ${r.getFormattedError()}`, {exit: 1})
     }
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
     const returned_field = r.getData()
 
     if (pipe) {

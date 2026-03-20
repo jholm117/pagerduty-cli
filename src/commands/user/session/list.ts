@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import * as utils from '../../../utils'
 import jp from 'jsonpath'
@@ -50,7 +50,7 @@ export default class UserSessionList extends AuthenticatedBaseCommand<typeof Use
       description: 'Query the API output',
       char: 'q',
     }),
-    ...CliUx.ux.table.flags(),
+    ...ux.table.flags(),
   }
 
   public async init(): Promise<void> {
@@ -68,10 +68,10 @@ export default class UserSessionList extends AuthenticatedBaseCommand<typeof Use
     if (this.flags.id) {
       userID = this.flags.id
     } else if (this.flags.email) {
-      CliUx.ux.action.start(`Finding PD user ${chalk.bold.blue(this.flags.email)}`)
+      ux.action.start(`Finding PD user ${chalk.bold.blue(this.flags.email)}`)
       userID = await this.pd.userIDForEmail(this.flags.email)
       if (!userID) {
-        CliUx.ux.action.stop(chalk.bold.red('failed!'))
+        ux.action.stop(chalk.bold.red('failed!'))
         this.error(`No user was found for the email "${this.flags.email}"`, { exit: 1 })
       }
     } else {
@@ -103,9 +103,9 @@ export default class UserSessionList extends AuthenticatedBaseCommand<typeof Use
     }
 
     if (sessions.length > 0) {
-      CliUx.ux.action.stop(chalk.bold.green(`got ${sessions.length}`))
+      ux.action.stop(chalk.bold.green(`got ${sessions.length}`))
     } else {
-      CliUx.ux.action.stop(chalk.bold.red('none found'))
+      ux.action.stop(chalk.bold.red('none found'))
       this.exit(0)
     }
 

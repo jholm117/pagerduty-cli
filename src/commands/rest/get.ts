@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 
 export default class RestGet extends AuthenticatedBaseCommand<typeof RestGet> {
@@ -58,7 +58,7 @@ export default class RestGet extends AuthenticatedBaseCommand<typeof RestGet> {
       headers[key] = value
     }
 
-    CliUx.ux.action.start('Talking to PD')
+    ux.action.start('Talking to PD')
     const response = await this.pd.request({
       endpoint: this.flags.endpoint,
       method: 'GET',
@@ -67,10 +67,10 @@ export default class RestGet extends AuthenticatedBaseCommand<typeof RestGet> {
     })
 
     if (response.isFailure) {
-      CliUx.ux.action.stop(chalk.bold.red('failed!'))
+      ux.action.stop(chalk.bold.red('failed!'))
       this.error(`Request failed: ${response.getFormattedError()}`)
     }
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
     await this.printJsonAndExit(response.getData())
   }
 }

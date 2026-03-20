@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import { Flags, CliUx } from '@oclif/core'
+import { Flags, ux } from '@oclif/core'
 import { PD } from '../../pd'
 
 export default class OrchestrationList extends AuthenticatedBaseCommand<typeof OrchestrationList> {
@@ -26,7 +26,7 @@ export default class OrchestrationList extends AuthenticatedBaseCommand<typeof O
       description: 'Delimiter for fields that have more than one value',
       default: '\\n',
     }),
-    ...CliUx.ux.table.flags(),
+    ...ux.table.flags(),
   }
 
   public async init(): Promise<void> {

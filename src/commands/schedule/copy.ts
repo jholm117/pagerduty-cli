@@ -1,7 +1,8 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import * as utils from '../../utils'
+import open from 'open'
 
 export default class ScheduleCopy extends AuthenticatedBaseCommand<typeof ScheduleCopy> {
   static description = 'Make a copy of a PagerDuty Schedule'
@@ -55,13 +56,13 @@ export default class ScheduleCopy extends AuthenticatedBaseCommand<typeof Schedu
       this.error('No schedule specified', { exit: 1 })
     }
 
-    CliUx.ux.action.start(`Getting schedule ${chalk.bold.blue(schedule_id)}`)
+    ux.action.start(`Getting schedule ${chalk.bold.blue(schedule_id)}`)
     let r = await this.pd.request({
       endpoint: `schedules/${schedule_id}`,
       method: 'GET',
     })
     if (r.isFailure) {
-      CliUx.ux.action.stop(chalk.bold.red('failed!'))
+      ux.action.stop(chalk.bold.red('failed!'))
       this.error(`Couldn't get schedule ${chalk.bold.blue(schedule_id)}: ${r.getFormattedError()}`)
     }
 
@@ -77,30 +78,30 @@ export default class ScheduleCopy extends AuthenticatedBaseCommand<typeof Schedu
         schedule_layers: schedule_layers,
       },
     }
-    CliUx.ux.action.start(`Copying schedule ${chalk.bold.blue(schedule_id)}`)
+    ux.action.start(`Copying schedule ${chalk.bold.blue(schedule_id)}`)
     r = await this.pd.request({
       endpoint: 'schedules',
       method: 'POST',
       data: dest_schedule,
     })
     if (r.isFailure) {
-      CliUx.ux.action.stop(chalk.bold.red('failed!'))
+      ux.action.stop(chalk.bold.red('failed!'))
       this.error(`Couldn't create schedule: ${r.getFormattedError()}`)
     }
     const returned_schedule = r.getData()
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
 
     if (this.flags.pipe) {
       this.log(returned_schedule.schedule.id)
     } else if (this.flags.open) {
-      CliUx.ux.action.start(`Opening ${chalk.bold.blue(returned_schedule.schedule.html_url)} in the browser`)
+      ux.action.start(`Opening ${chalk.bold.blue(returned_schedule.schedule.html_url)} in the browser`)
       try {
-        await CliUx.ux.open(returned_schedule.schedule.html_url)
+        await open(returned_schedule.schedule.html_url)
       } catch (error) {
-        CliUx.ux.action.stop(chalk.bold.red('failed!'))
+        ux.action.stop(chalk.bold.red('failed!'))
         this.error('Couldn\'t open your browser. Are you running as root?', { exit: 1 })
       }
-      CliUx.ux.action.stop(chalk.bold.green('done'))
+      ux.action.stop(chalk.bold.green('done'))
     } else {
       this.log(`Your new schedule is at ${chalk.bold.blue(returned_schedule.schedule.html_url)}`)
     }

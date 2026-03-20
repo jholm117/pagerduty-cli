@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import parsePhoneNumber from 'libphonenumber-js'
 
@@ -37,24 +37,24 @@ export default class UserContactSet extends AuthenticatedBaseCommand<typeof User
     if (this.flags.id) {
       userID = this.flags.id
     } else if (this.flags.email) {
-      CliUx.ux.action.start(`Finding PD user ${chalk.bold.blue(this.flags.email)}`)
+      ux.action.start(`Finding PD user ${chalk.bold.blue(this.flags.email)}`)
       userID = await this.pd.userIDForEmail(this.flags.email)
       if (!userID) {
-        CliUx.ux.action.stop(chalk.bold.red('failed!'))
+        ux.action.stop(chalk.bold.red('failed!'))
         this.error(`No user was found for the email "${this.flags.email}"`, { exit: 1 })
       }
     } else {
       this.error('You must specify one of: -i, -e', { exit: 1 })
     }
 
-    CliUx.ux.action.start(`Finding contact ${chalk.bold.blue(this.flags.contact_id)}`)
+    ux.action.start(`Finding contact ${chalk.bold.blue(this.flags.contact_id)}`)
     let r = await this.pd.request({
       endpoint: `users/${userID}/contact_methods/${this.flags.contact_id}`,
       method: 'GET',
     })
 
     if (r.isFailure) {
-      CliUx.ux.action.stop(chalk.bold.red('failed!'))
+      ux.action.stop(chalk.bold.red('failed!'))
       this.error(`Request failed: ${r.getFormattedError}`, { exit: 1 })
     }
 
@@ -75,17 +75,17 @@ export default class UserContactSet extends AuthenticatedBaseCommand<typeof User
       body.contact_method.label = this.flags.label
     }
 
-    CliUx.ux.action.start(`Updating contact method ${this.flags.contact_id} for user ${chalk.bold.blue(userID)}`)
+    ux.action.start(`Updating contact method ${this.flags.contact_id} for user ${chalk.bold.blue(userID)}`)
     r = await this.pd.request({
       endpoint: `users/${userID}/contact_methods/${this.flags.contact_id}`,
       method: 'PUT',
       data: body,
     })
     if (r.isFailure) {
-      CliUx.ux.action.stop(chalk.bold.red('failed!'))
+      ux.action.stop(chalk.bold.red('failed!'))
       this.error(`Request failed: ${r.getFormattedError()}`, { exit: 1 })
     }
     const contact_method = r.getData()
-    CliUx.ux.action.stop(`${chalk.bold.green('updated contact method')} ${chalk.bold.blue(contact_method.contact_method.id)}`)
+    ux.action.stop(`${chalk.bold.green('updated contact method')} ${chalk.bold.blue(contact_method.contact_method.id)}`)
   }
 }

@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import * as chrono from 'chrono-node'
 
 export default class Log extends AuthenticatedBaseCommand<typeof Log> {
@@ -32,7 +32,7 @@ export default class Log extends AuthenticatedBaseCommand<typeof Log> {
       description: 'Delimiter for fields that have more than one value',
       default: '\\n',
     }),
-    ...CliUx.ux.table.flags(),
+    ...ux.table.flags(),
   }
 
   public async init(): Promise<void> {

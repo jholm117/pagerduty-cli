@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import * as utils from '../../../utils'
 import { PD } from '../../../pd'
@@ -39,10 +39,10 @@ export default class TeamUserAdd extends AuthenticatedBaseCommand<typeof TeamUse
   async run() {
     let team_ids = []
     if (this.flags.name) {
-      CliUx.ux.action.start('Finding teams in PD')
+      ux.action.start('Finding teams in PD')
       const teams = await this.pd.fetch('teams', { params: { query: this.flags.name } })
       if (teams.length === 0) {
-        CliUx.ux.action.stop(chalk.bold.red('no teams found matching ') + chalk.bold.blue(this.flags.name))
+        ux.action.stop(chalk.bold.red('no teams found matching ') + chalk.bold.blue(this.flags.name))
         this.exit(0)
       }
       for (const team of teams) {
@@ -59,7 +59,7 @@ export default class TeamUserAdd extends AuthenticatedBaseCommand<typeof TeamUse
     }
 
     if (team_ids.length === 0) {
-      CliUx.ux.action.stop(chalk.bold.red('no teams specified'))
+      ux.action.stop(chalk.bold.red('no teams specified'))
       this.exit(0)
     }
 

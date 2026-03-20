@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../../../base/authenticated-base-command'
-import {CliUx, Flags} from '@oclif/core'
+import {ux, Flags} from '@oclif/core'
 import chalk from 'chalk'
 
 export default class FieldSchemaAssignmentCreate extends AuthenticatedBaseCommand<typeof FieldSchemaAssignmentCreate> {
@@ -41,7 +41,7 @@ export default class FieldSchemaAssignmentCreate extends AuthenticatedBaseComman
       }
     }
 
-    CliUx.ux.action.start(`Assigning PagerDuty field schema ${chalk.bold.blue(schema_id)} to service ${chalk.bold.blue(service_id)}`)
+    ux.action.start(`Assigning PagerDuty field schema ${chalk.bold.blue(schema_id)} to service ${chalk.bold.blue(service_id)}`)
     const r = await this.pd.request({
       endpoint: 'customfields/schema_assignments',
       method: 'POST',
@@ -51,6 +51,6 @@ export default class FieldSchemaAssignmentCreate extends AuthenticatedBaseComman
     if (r.isFailure) {
       this.error(`Request failed: ${r.getFormattedError()}`, {exit: 1})
     }
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
   }
 }

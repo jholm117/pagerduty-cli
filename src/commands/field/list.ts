@@ -1,6 +1,6 @@
 // import { ListBaseCommand } from '../../base/list-base-command'
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import {CliUx, Flags} from '@oclif/core'
+import {ux, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import * as utils from '../../utils'
 import jp from 'jsonpath'
@@ -29,7 +29,7 @@ export default class FieldList extends AuthenticatedBaseCommand<typeof FieldList
       description: 'Delimiter for fields that have more than one value',
       default: '\n',
     }),
-    ...CliUx.ux.table.flags(),
+    ...ux.table.flags(),
   }
 
   async run() {

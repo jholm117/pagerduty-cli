@@ -1,5 +1,5 @@
 import { ListBaseCommand } from '../../base/list-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import parsePhoneNumber, { PhoneNumber } from 'libphonenumber-js'
 
 export default class UserList extends ListBaseCommand<typeof UserList> {
@@ -23,7 +23,7 @@ export default class UserList extends ListBaseCommand<typeof UserList> {
       description: 'Select only users with an SMS or Phone Contact method in the country (defined by the ISO 3166-1 alpha-2 country code)',
       multiple: true
     }),
-    ...CliUx.ux.table.flags(),
+    ...ux.table.flags(),
   }
 
   async run() {

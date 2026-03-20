@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import { Flags, CliUx } from '@oclif/core'
+import { Flags, ux } from '@oclif/core'
 import chalk from 'chalk'
 
 export default class OrchestrationAdd extends AuthenticatedBaseCommand<typeof OrchestrationAdd> {
@@ -53,18 +53,18 @@ export default class OrchestrationAdd extends AuthenticatedBaseCommand<typeof Or
       }
     }
 
-    CliUx.ux.action.start(`Adding orchestration ${chalk.bold.blue(this.flags.name)}`)
+    ux.action.start(`Adding orchestration ${chalk.bold.blue(this.flags.name)}`)
     const r = await this.pd.request({
       endpoint: 'event_orchestrations',
       method: 'POST',
       data: body,
     })
     if (r.isFailure) {
-      CliUx.ux.action.stop(chalk.bold.red('failed!'))
+      ux.action.stop(chalk.bold.red('failed!'))
       this.error(`Failed to create an orchestration: ${r.getFormattedError()}`)
     }
     const orch = r.getData()
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
     this.log(`Created orchestration ${chalk.bold.blue(orch.orchestration.id)} with routing key ${chalk.bold.blue(orch.orchestration.integrations[0].parameters.routing_key)}`)
   }
 }

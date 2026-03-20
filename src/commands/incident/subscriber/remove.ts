@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import getStream from 'get-stream'
 import * as utils from '../../../utils'
@@ -61,11 +61,11 @@ export default class IncidentSubscriberRemove extends AuthenticatedBaseCommand<t
     if (this.flags.me) {
       const me = await this.me(true)
       const params = { user_ids: [me.user.id] }
-      CliUx.ux.action.start('Getting incidents from PD')
+      ux.action.start('Getting incidents from PD')
       const incidents = await this.pd.fetch('incidents', { params: params })
 
       if (incidents.length === 0) {
-        CliUx.ux.action.stop(chalk.bold.red('none found'))
+        ux.action.stop(chalk.bold.red('none found'))
         this.exit(1)
       }
       incident_ids = incidents.map((e: { id: any }) => e.id)
@@ -98,7 +98,7 @@ export default class IncidentSubscriberRemove extends AuthenticatedBaseCommand<t
 
     if (this.flags.user_emails) {
       for (const user_email of this.flags.user_emails) {
-        CliUx.ux.action.start(`Finding user ID for ${chalk.bold.blue(user_email)}`)
+        ux.action.start(`Finding user ID for ${chalk.bold.blue(user_email)}`)
         // eslint-disable-next-line no-await-in-loop
         const user_id = await this.pd.userIDForEmail(user_email)
         if (!user_id) {
@@ -118,7 +118,7 @@ export default class IncidentSubscriberRemove extends AuthenticatedBaseCommand<t
 
     if (this.flags.team_names) {
       for (const team_name of this.flags.team_names) {
-        CliUx.ux.action.start(`Finding team ID for ${chalk.bold.blue(team_name)}`)
+        ux.action.start(`Finding team ID for ${chalk.bold.blue(team_name)}`)
         // eslint-disable-next-line no-await-in-loop
         const team_id = await this.pd.teamIDForName(team_name)
         if (!team_id) {

@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import * as utils from '../../../utils'
 import * as chrono from 'chrono-node'
@@ -46,7 +46,7 @@ export default class ScheduleOverrideList extends AuthenticatedBaseCommand<typeo
       description: 'Delimiter for fields that have more than one value',
       default: '\\n',
     }),
-    ...CliUx.ux.table.flags(),
+    ...ux.table.flags(),
   }
 
   public async init(): Promise<void> {
@@ -67,10 +67,10 @@ export default class ScheduleOverrideList extends AuthenticatedBaseCommand<typeo
       }
       scheduleID = this.flags.id
     } else if (this.flags.name) {
-      CliUx.ux.action.start(`Finding PD schedule ${chalk.bold.blue(this.flags.name)}`)
+      ux.action.start(`Finding PD schedule ${chalk.bold.blue(this.flags.name)}`)
       scheduleID = await this.pd.scheduleIDForName(this.flags.name)
       if (!scheduleID) {
-        CliUx.ux.action.stop(chalk.bold.red('failed!'))
+        ux.action.stop(chalk.bold.red('failed!'))
         this.error(`No schedule was found with the name "${this.flags.name}"`, { exit: 1 })
       }
     } else {

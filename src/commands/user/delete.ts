@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import getStream from 'get-stream'
 import * as utils from '../../utils'
@@ -40,18 +40,18 @@ export default class UserDelete extends AuthenticatedBaseCommand<typeof UserDele
 
     let user_ids: string[] = []
     if (this.flags.emails) {
-      CliUx.ux.action.start('Getting user IDs from PD')
+      ux.action.start('Getting user IDs from PD')
       user_ids = await this.pd.userIDsForEmails(this.flags.emails)
     }
     if (this.flags.exact_emails) {
-      CliUx.ux.action.start('Getting user IDs from PD')
+      ux.action.start('Getting user IDs from PD')
       for (const email of this.flags.exact_emails) {
         // eslint-disable-next-line no-await-in-loop
         const user_id = await this.pd.userIDForEmail(email)
         if (user_id) user_ids = [...new Set([...user_ids, user_id])]
       }
     }
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
     if (this.flags.ids) {
       user_ids = [...new Set([...user_ids, ...utils.splitDedupAndFlatten(this.flags.ids)])]
     }
@@ -75,15 +75,15 @@ export default class UserDelete extends AuthenticatedBaseCommand<typeof UserDele
     if (this.flags.force) {
       let countdown = 5
       while (countdown > -1) {
-        CliUx.ux.action.start(`Warning: user:delete running in ${chalk.bold.red('extreme danger mode')}!\nHit ${chalk.bold.blue('Ctrl-C')} if you don't want to delete ${things_to_delete_str}.\nStarting in ${chalk.bold(String(countdown) + ' seconds')}`)
+        ux.action.start(`Warning: user:delete running in ${chalk.bold.red('extreme danger mode')}!\nHit ${chalk.bold.blue('Ctrl-C')} if you don't want to delete ${things_to_delete_str}.\nStarting in ${chalk.bold(String(countdown) + ' seconds')}`)
         // eslint-disable-next-line no-await-in-loop
-        await CliUx.ux.wait(1000)
+        await ux.wait(1000)
         countdown--
       }
-      CliUx.ux.action.stop(chalk.bold.green('ok'))
+      ux.action.stop(chalk.bold.green('ok'))
     } else {
       const confirm_str = `Yes, delete ${things_to_delete_str}`
-      const ok = await CliUx.ux.prompt(chalk.bold.red(`About to delete ${chalk.bold(things_to_delete_str)}. Are you absolutely sure?\nType '${chalk.bold.blue(confirm_str)}' to confirm`), { default: 'nope' })
+      const ok = await ux.prompt(chalk.bold.red(`About to delete ${chalk.bold(things_to_delete_str)}. Are you absolutely sure?\nType '${chalk.bold.blue(confirm_str)}' to confirm`), { default: 'nope' })
       if (ok !== confirm_str) {
         // eslint-disable-next-line no-console
         console.warn(`OK, doing nothing... ${chalk.bold.green('done')}`)

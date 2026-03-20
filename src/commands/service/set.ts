@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import getStream from 'get-stream'
 import jp from 'jsonpath'
@@ -58,11 +58,11 @@ export default class ServiceSet extends AuthenticatedBaseCommand<typeof ServiceS
 
     let service_ids: string[] = []
     if (this.flags.names) {
-      CliUx.ux.action.start('Getting service IDs from PD')
+      ux.action.start('Getting service IDs from PD')
       service_ids = [...service_ids, ...await this.pd.serviceIDsForNames(this.flags.names)]
     }
     if (this.flags.exact_names) {
-      CliUx.ux.action.start('Getting service IDs from PD')
+      ux.action.start('Getting service IDs from PD')
       service_ids = [...service_ids, ...await this.pd.serviceIDsForNames(this.flags.exact_names, true)]
     }
     if (this.flags.ids) {
@@ -72,7 +72,7 @@ export default class ServiceSet extends AuthenticatedBaseCommand<typeof ServiceS
       const str: string = await getStream(process.stdin)
       service_ids = utils.splitDedupAndFlatten([str])
     }
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
     service_ids = [...new Set(service_ids)]
     if (service_ids.length === 0) {
       this.error('No service ID\'s were found. Please try a different search.', { exit: 1 })

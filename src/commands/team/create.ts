@@ -1,7 +1,8 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import {CliUx, Flags} from '@oclif/core'
+import {ux, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import * as utils from '../../utils'
+import open from 'open'
 
 export default class TeamCreate extends AuthenticatedBaseCommand<typeof TeamCreate> {
   static description = 'Create an empty PagerDuty Team. You can add escalation policies and users later with team:ep and team:user'
@@ -76,20 +77,20 @@ export default class TeamCreate extends AuthenticatedBaseCommand<typeof TeamCrea
     if (r.isFailure) {
       this.error(`Failed to create team: ${r.getFormattedError()}`, {exit: 1})
     }
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
     const returned_team = r.getData()
 
     if (this.flags.pipe) {
       this.log(returned_team.team.id)
     } else if (this.flags.open) {
-      CliUx.ux.action.start(`Opening ${chalk.bold.blue(returned_team.team.html_url)} in the browser`)
+      ux.action.start(`Opening ${chalk.bold.blue(returned_team.team.html_url)} in the browser`)
       try {
-        await CliUx.ux.open(returned_team.team.html_url)
+        await open(returned_team.team.html_url)
       } catch (error) {
-        CliUx.ux.action.stop(chalk.bold.red('failed!'))
+        ux.action.stop(chalk.bold.red('failed!'))
         this.error('Couldn\'t open your browser. Are you running as root?', {exit: 1})
       }
-      CliUx.ux.action.stop(chalk.bold.green('done'))
+      ux.action.stop(chalk.bold.green('done'))
     } else {
       this.log(`Your new team is at ${chalk.bold.blue(returned_team.team.html_url)}`)
     }

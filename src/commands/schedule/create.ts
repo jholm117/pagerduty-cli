@@ -1,8 +1,9 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import parse from 'parse-duration'
 import * as chrono from 'chrono-node'
+import open from 'open'
 
 export default class ScheduleCreate extends AuthenticatedBaseCommand<typeof ScheduleCreate> {
   static description = 'Create a PagerDuty Schedule'
@@ -124,7 +125,7 @@ export default class ScheduleCreate extends AuthenticatedBaseCommand<typeof Sche
       schedule.schedule.description = this.flags.description
     }
 
-    CliUx.ux.action.start('Creating schedule')
+    ux.action.start('Creating schedule')
     const r = await this.pd.request({
       endpoint: 'schedules',
       method: 'POST',
@@ -132,7 +133,7 @@ export default class ScheduleCreate extends AuthenticatedBaseCommand<typeof Sche
     })
 
     if (r.isFailure) {
-      CliUx.ux.action.stop(chalk.bold.red('failed!'))
+      ux.action.stop(chalk.bold.red('failed!'))
       this.error(r.getFormattedError(), { exit: 1 })
     }
 
@@ -142,14 +143,14 @@ export default class ScheduleCreate extends AuthenticatedBaseCommand<typeof Sche
       this.log(returned_schedule.schedule.id)
     } else {
       if (this.flags.open) {
-        CliUx.ux.action.start(`Opening ${chalk.bold.blue(returned_schedule.schedule.html_url)} in the browser`)
+        ux.action.start(`Opening ${chalk.bold.blue(returned_schedule.schedule.html_url)} in the browser`)
         try {
-          await CliUx.ux.open(returned_schedule.schedule.html_url)
+          await open(returned_schedule.schedule.html_url)
         } catch (error) {
-          CliUx.ux.action.stop(chalk.bold.red('failed!'))
+          ux.action.stop(chalk.bold.red('failed!'))
           this.error('Couldn\'t open your browser. Are you running as root?', { exit: 1 })
         }
-        CliUx.ux.action.stop(chalk.bold.green('done'))
+        ux.action.stop(chalk.bold.green('done'))
       }
       this.log(`Your new schedule is at ${chalk.bold.blue(returned_schedule.schedule.html_url)}`)
     }

@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import getStream from 'get-stream'
 import jp from 'jsonpath'
@@ -55,11 +55,11 @@ export default class UserSet extends AuthenticatedBaseCommand<typeof UserSet> {
 
     let user_ids: string[] = []
     if (this.flags.emails) {
-      CliUx.ux.action.start('Getting user IDs from PD')
+      ux.action.start('Getting user IDs from PD')
       user_ids = [...user_ids, ...await this.pd.userIDsForEmails(this.flags.emails)]
     }
     if (this.flags.exact_emails) {
-      CliUx.ux.action.start('Getting user IDs from PD')
+      ux.action.start('Getting user IDs from PD')
       user_ids = [...user_ids, ...await this.pd.userIDsForEmails(this.flags.exact_emails, true)]
     }
     if (this.flags.ids) {
@@ -69,7 +69,7 @@ export default class UserSet extends AuthenticatedBaseCommand<typeof UserSet> {
       const str: string = await getStream(process.stdin)
       user_ids = utils.splitDedupAndFlatten([str])
     }
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
     user_ids = [...new Set(user_ids)]
     if (user_ids.length === 0) {
       this.error('No user ID\'s were found. Please try a different search.', { exit: 1 })

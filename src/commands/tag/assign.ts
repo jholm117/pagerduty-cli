@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import * as utils from '../../utils'
 import { PD } from '../../pd'
@@ -75,7 +75,7 @@ export default class TagAssign extends AuthenticatedBaseCommand<typeof TagAssign
     }
 
     if (remove_names.length > 0) {
-      CliUx.ux.action.start(`Finding IDs for ${remove_names.length} tags`)
+      ux.action.start(`Finding IDs for ${remove_names.length} tags`)
       for (const remove_name of remove_names) {
         const remove_id = await this.pd.tagIDForName(remove_name)
         if (remove_id) {
@@ -84,7 +84,7 @@ export default class TagAssign extends AuthenticatedBaseCommand<typeof TagAssign
           this.warn(`No tag was found with the name ${chalk.bold.blue(remove_name)}`)
         }
       }
-      CliUx.ux.action.stop(chalk.bold.green('done'))
+      ux.action.stop(chalk.bold.green('done'))
     }
 
     if (add_ids.length + add_names.length + remove_ids.length === 0) {
@@ -111,18 +111,18 @@ export default class TagAssign extends AuthenticatedBaseCommand<typeof TagAssign
     }
 
     if (user_emails) {
-      CliUx.ux.action.start(`Finding IDs for ${user_emails.length} users`)
+      ux.action.start(`Finding IDs for ${user_emails.length} users`)
       for (const user_email of user_emails) {
         
         const user_id = await this.pd.userIDForEmail(user_email)
         if (user_id) {
           user_ids.push(user_id)
         } else {
-          CliUx.ux.action.stop(chalk.bold.red('failed!'))
+          ux.action.stop(chalk.bold.red('failed!'))
           this.error(`No user was found for email ${chalk.bold.blue(user_email)}`, { exit: 1 })
         }
       }
-      CliUx.ux.action.stop(chalk.bold.green('done'))
+      ux.action.stop(chalk.bold.green('done'))
     }
 
     const requests: PD.Request[] = [

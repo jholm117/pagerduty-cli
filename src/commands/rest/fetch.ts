@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 
 export default class RestFetch extends AuthenticatedBaseCommand<typeof RestFetch> {
   static description = 'Fetch objects from PagerDuty'
@@ -45,7 +45,7 @@ export default class RestFetch extends AuthenticatedBaseCommand<typeof RestFetch
       description: 'Return no more than this many entries. This option turns off table filtering options.',
       exclusive: ['filter', 'sort'],
     }),
-    ...CliUx.ux.table.flags(),
+    ...ux.table.flags(),
   }
 
   public async init(): Promise<void> {
@@ -101,7 +101,7 @@ export default class RestFetch extends AuthenticatedBaseCommand<typeof RestFetch
       headers[key] = value
     }
 
-    CliUx.ux.action.start('Talking to PD')
+    ux.action.start('Talking to PD')
     const data = await this.pd.fetchWithSpinner(this.flags.endpoint, {
       params: params,
       headers: headers,

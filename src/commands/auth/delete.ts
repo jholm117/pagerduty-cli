@@ -1,5 +1,5 @@
 import { BaseCommand } from '../../base/base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 
 export default class AuthDelete extends BaseCommand<typeof AuthDelete> {
@@ -21,11 +21,11 @@ export default class AuthDelete extends BaseCommand<typeof AuthDelete> {
     }
     const deletingDefault =
       this._config.defaultAlias() === this.flags.alias ? true : false
-    CliUx.ux.action.start(`Deleting auth for ${this.flags.alias}`)
+    ux.action.start(`Deleting auth for ${this.flags.alias}`)
     if (this._config.delete(this.flags.alias)) {
       this._config.save()
       this.init()
-      CliUx.ux.action.stop(chalk.bold.green('done'))
+      ux.action.stop(chalk.bold.green('done'))
       if (this._config.all().length === 0) {
         this.log(
           'That was your only configured domain, so you\'re not logged in to PagerDuty any more'
@@ -37,7 +37,7 @@ export default class AuthDelete extends BaseCommand<typeof AuthDelete> {
         const me = await this.me()
         const domain = await this.pd.domain()
         if (me && me.user.id) {
-          CliUx.ux.action.stop(chalk.bold.green('done'))
+          ux.action.stop(chalk.bold.green('done'))
           this.log(
             `You are logged in to ${chalk.bold.blue(
               domain
@@ -46,7 +46,7 @@ export default class AuthDelete extends BaseCommand<typeof AuthDelete> {
             )})`
           )
         } else {
-          CliUx.ux.action.stop(chalk.bold.green('done'))
+          ux.action.stop(chalk.bold.green('done'))
           this.log(
             `You are logged in to ${chalk.bold.blue(
               domain
@@ -57,7 +57,7 @@ export default class AuthDelete extends BaseCommand<typeof AuthDelete> {
         }
       }
     } else {
-      CliUx.ux.action.stop(chalk.bold.red('failed!'))
+      ux.action.stop(chalk.bold.red('failed!'))
       this.error(`Failed to delete ${this.flags.alias}. Are you sure it exists?`, {
         suggestions: ['pd auth:list'],
         exit: 1,

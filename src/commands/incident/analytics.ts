@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import getStream from 'get-stream'
 import * as utils from '../../utils'
 
@@ -33,7 +33,7 @@ export default class IncidentAnalytics extends AuthenticatedBaseCommand<typeof I
       description: 'Read incident ID\'s from stdin.',
       exclusive: ['ids'],
     }),
-    ...CliUx.ux.table.flags(),
+    ...ux.table.flags(),
   }
 
   public async init(): Promise<void> {

@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../../base/authenticated-base-command'
-import {CliUx, Flags} from '@oclif/core'
+import {ux, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import * as utils from '../../../utils'
 import jp from 'jsonpath'
@@ -33,7 +33,7 @@ export default class FieldSchemaListFields extends AuthenticatedBaseCommand<type
       description: 'Delimiter for fields that have more than one value',
       default: '\n',
     }),
-    ...CliUx.ux.table.flags(),
+    ...ux.table.flags(),
   }
 
   async run() {
@@ -54,7 +54,7 @@ export default class FieldSchemaListFields extends AuthenticatedBaseCommand<type
     })
     const fieldsMap = Object.assign({}, ...fields.map((field) => ({[field.id]: field})))
 
-    CliUx.ux.action.start('Getting schema field configurations')
+    ux.action.start('Getting schema field configurations')
     const r = await this.pd.request({
       endpoint: `customfields/schemas/${id}`,
       method: 'GET',
@@ -64,10 +64,10 @@ export default class FieldSchemaListFields extends AuthenticatedBaseCommand<type
       headers,
     })
     if (r.isFailure) {
-      CliUx.ux.action.stop(chalk.bold.red('failed!'))
+      ux.action.stop(chalk.bold.red('failed!'))
       this.error(`Failed to get schema ${id}`, {exit: 1})
     }
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
 
     const schema = r.getData().schema
     const field_configurations = schema.field_configurations

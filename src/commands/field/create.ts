@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import {CliUx, Flags} from '@oclif/core'
+import {ux, Flags} from '@oclif/core'
 import chalk from 'chalk'
 
 export default class FieldCreate extends AuthenticatedBaseCommand<typeof FieldCreate> {
@@ -65,7 +65,7 @@ export default class FieldCreate extends AuthenticatedBaseCommand<typeof FieldCr
       }
     }
 
-    CliUx.ux.action.start('Creating PagerDuty field')
+    ux.action.start('Creating PagerDuty field')
     const r = await this.pd.request({
       endpoint: 'customfields/fields',
       method: 'POST',
@@ -75,7 +75,7 @@ export default class FieldCreate extends AuthenticatedBaseCommand<typeof FieldCr
     if (r.isFailure) {
       this.error(`Failed to create field: ${r.getFormattedError()}`, {exit: 1})
     }
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
     const returned_field = r.getData()
 
     if (pipe) {

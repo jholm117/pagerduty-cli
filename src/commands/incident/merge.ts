@@ -1,8 +1,9 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import getStream from 'get-stream'
 import * as utils from '../../utils'
+import open from 'open'
 
 export default class IncidentMerge extends AuthenticatedBaseCommand<typeof IncidentMerge> {
   static description = 'Merge PagerDuty Incidents'
@@ -74,7 +75,7 @@ export default class IncidentMerge extends AuthenticatedBaseCommand<typeof Incid
     const source_incidents = incident_ids.map(x => ({ id: x, type: 'incident_reference' }))
     const data = { source_incidents }
 
-    CliUx.ux.action.start(`Merging ${chalk.bold.blue(incident_ids.length.toString())} incidents into parent incident ${chalk.bold.blue(parent_id)}`)
+    ux.action.start(`Merging ${chalk.bold.blue(incident_ids.length.toString())} incidents into parent incident ${chalk.bold.blue(parent_id)}`)
 
     const r = await this.pd.request({
       method: 'PUT',
@@ -84,21 +85,21 @@ export default class IncidentMerge extends AuthenticatedBaseCommand<typeof Incid
     })
 
     if (r.isFailure) {
-      CliUx.ux.action.stop(chalk.bold.red('failed!'))
+      ux.action.stop(chalk.bold.red('failed!'))
       this.error(`Couldn't merge incidents: ${r.getFormattedError()}`)
     }
     const returned_incident = r.getData()
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
 
     if (this.flags.open) {
-      CliUx.ux.action.start(`Opening ${chalk.bold.blue(returned_incident.incident.html_url)} in the browser`)
+      ux.action.start(`Opening ${chalk.bold.blue(returned_incident.incident.html_url)} in the browser`)
       try {
-        await CliUx.ux.open(returned_incident.incident.html_url)
+        await open(returned_incident.incident.html_url)
       } catch (error) {
-        CliUx.ux.action.stop(chalk.bold.red('failed!'))
+        ux.action.stop(chalk.bold.red('failed!'))
         this.error('Couldn\'t open your browser. Are you running as root?', { exit: 1 })
       }
-      CliUx.ux.action.stop(chalk.bold.green('done'))
+      ux.action.stop(chalk.bold.green('done'))
     }
   }
 }

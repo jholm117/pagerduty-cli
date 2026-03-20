@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import getStream from 'get-stream'
 import * as utils from '../../../utils'
@@ -84,11 +84,11 @@ export default class IncidentResponderAdd extends AuthenticatedBaseCommand<typeo
     if (this.flags.me) {
       const me = await this.me(true)
       const params = { user_ids: [me.user.id] }
-      CliUx.ux.action.start('Getting incidents from PD')
+      ux.action.start('Getting incidents from PD')
       const incidents = await this.pd.fetch('incidents', { params: params })
 
       if (incidents.length === 0) {
-        CliUx.ux.action.stop(chalk.bold.red('none found'))
+        ux.action.stop(chalk.bold.red('none found'))
         this.exit(1)
       }
       incident_ids = incidents.map((e: { id: any }) => e.id)
@@ -126,7 +126,7 @@ export default class IncidentResponderAdd extends AuthenticatedBaseCommand<typeo
 
     if (this.flags.user_emails) {
       for (const user_email of this.flags.user_emails) {
-        CliUx.ux.action.start(`Finding user ID for ${chalk.bold.blue(user_email)}`)
+        ux.action.start(`Finding user ID for ${chalk.bold.blue(user_email)}`)
         // eslint-disable-next-line no-await-in-loop
         const user_id = await this.pd.userIDForEmail(user_email)
         if (!user_id) {
@@ -158,7 +158,7 @@ export default class IncidentResponderAdd extends AuthenticatedBaseCommand<typeo
 
     if (this.flags.ep_names) {
       for (const ep_name of this.flags.ep_names) {
-        CliUx.ux.action.start(`Finding EP ID for ${chalk.bold.blue(ep_name)}`)
+        ux.action.start(`Finding EP ID for ${chalk.bold.blue(ep_name)}`)
         // eslint-disable-next-line no-await-in-loop
         const ep_id = await this.pd.epIDForName(ep_name)
         if (!ep_id) {
@@ -188,7 +188,7 @@ export default class IncidentResponderAdd extends AuthenticatedBaseCommand<typeo
         stopSpinnerWhenDone: false,
       })
       if (r.getFailedIndices().length > 0) {
-        CliUx.ux.action.stop(chalk.bold.yellow('warning'))
+        ux.action.stop(chalk.bold.yellow('warning'))
         for (const i of r.getFailedIndices()) {
           const incident_id = r.requests[i].endpoint.split('/')[1]
           const message = r.results[i].getFormattedError()

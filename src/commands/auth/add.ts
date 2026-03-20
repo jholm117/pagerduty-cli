@@ -1,5 +1,5 @@
 import { BaseCommand } from '../../base/base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import { Config } from '../../config'
 
@@ -47,10 +47,10 @@ export default class AuthAdd extends BaseCommand<typeof AuthAdd> {
     } = this.flags
 
     if (!token) {
-      token = await CliUx.ux.prompt('Enter a PagerDuty API token')
-      refresh_token = await CliUx.ux.prompt('Enter a OAuth2 Refresh token (optional)', {required: false})
+      token = await ux.prompt('Enter a PagerDuty API token')
+      refresh_token = await ux.prompt('Enter a OAuth2 Refresh token (optional)', {required: false})
       if (refresh_token) {
-        expires_at = await CliUx.ux.prompt('Enter an expiration date in ISO8601 datetime format (required)')
+        expires_at = await ux.prompt('Enter an expiration date in ISO8601 datetime format (required)')
       }
     }
     token = token || ''
@@ -60,13 +60,13 @@ export default class AuthAdd extends BaseCommand<typeof AuthAdd> {
     }
 
     try {
-      CliUx.ux.action.start('Checking token')
+      ux.action.start('Checking token')
       const subdomain = refresh_token
         ? await Config.configForTokenResponseBody({token: {access_token: token, refresh_token: refresh_token, expires_at: expires_at}}, this.flags.alias) 
         : await Config.configForToken(token, this.flags.alias)
       this._config.put(subdomain, this.flags.default)
       this._config.save()
-      CliUx.ux.action.stop(chalk.bold.green('done'))
+      ux.action.stop(chalk.bold.green('done'))
       this.log(
         `You are logged in to ${chalk.bold.blue(
           this._config.getCurrentSubdomain()
@@ -75,7 +75,7 @@ export default class AuthAdd extends BaseCommand<typeof AuthAdd> {
         )} (alias: ${chalk.bold.blue(this._config.defaultAlias())})`
       )
     } catch (error) {
-      CliUx.ux.action.stop(chalk.bold.red('failed!'))
+      ux.action.stop(chalk.bold.red('failed!'))
       if (error instanceof Error) {
         this.error(error.message, { exit: 1 })
       }

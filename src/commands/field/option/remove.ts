@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../../base/authenticated-base-command'
-import {CliUx, Flags} from '@oclif/core'
+import {ux, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import * as utils from '../../../utils'
 import jp from 'jsonpath'
@@ -38,7 +38,7 @@ export default class FieldOptionRemove extends AuthenticatedBaseCommand<typeof F
       'X-EARLY-ACCESS': 'flex-service-early-access',
     }
 
-    CliUx.ux.action.start(`Getting field details from PD`)
+    ux.action.start(`Getting field details from PD`)
     let r = await this.pd.request({
       endpoint: `customfields/fields/${id}`,
       method: 'GET',
@@ -54,7 +54,7 @@ export default class FieldOptionRemove extends AuthenticatedBaseCommand<typeof F
       this.error(`${chalk.bold.blue(id)} is not a fixed-options field`)
     }
 
-    CliUx.ux.action.start('Removing PagerDuty field option')
+    ux.action.start('Removing PagerDuty field option')
     r = await this.pd.request({
       endpoint: `customfields/fields/${id}/field_options/${option_id}`,
       method: 'DELETE',
@@ -63,7 +63,7 @@ export default class FieldOptionRemove extends AuthenticatedBaseCommand<typeof F
     if (r.isFailure) {
       this.error(`Failed to remove field option: ${r.getFormattedError()}`, {exit: 1})
     }
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
     const returned_field = r.getData()
   }
 }

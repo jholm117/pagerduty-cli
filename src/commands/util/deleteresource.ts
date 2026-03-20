@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import getStream from 'get-stream'
 import * as utils from '../../utils'
@@ -152,15 +152,15 @@ export default class UtilDeleteResource extends AuthenticatedBaseCommand<typeof 
     if (this.flags.force) {
       let countdown = 5
       while (countdown > -1) {
-        CliUx.ux.action.start(`Warning: util deleteresource running in ${chalk.bold.red('extreme danger mode')}!\nHit ${chalk.bold.blue('Ctrl-C')} if you don't want to delete ${things_to_delete_str}.\nStarting in ${chalk.bold(String(countdown) + ' seconds')}`)
+        ux.action.start(`Warning: util deleteresource running in ${chalk.bold.red('extreme danger mode')}!\nHit ${chalk.bold.blue('Ctrl-C')} if you don't want to delete ${things_to_delete_str}.\nStarting in ${chalk.bold(String(countdown) + ' seconds')}`)
         // eslint-disable-next-line no-await-in-loop
-        await CliUx.ux.wait(1000)
+        await ux.wait(1000)
         countdown--
       }
-      CliUx.ux.action.stop(chalk.bold.green('ok'))
+      ux.action.stop(chalk.bold.green('ok'))
     } else {
       const confirm_str = `Yes, delete ${things_to_delete_str}`
-      const ok = await CliUx.ux.prompt(chalk.bold.red(`About to delete ${chalk.bold(things_to_delete_str)}. Are you absolutely sure?\nType '${chalk.bold.blue(confirm_str)}' to confirm`), { default: 'nope' })
+      const ok = await ux.prompt(chalk.bold.red(`About to delete ${chalk.bold(things_to_delete_str)}. Are you absolutely sure?\nType '${chalk.bold.blue(confirm_str)}' to confirm`), { default: 'nope' })
       if (ok !== confirm_str) {
         // eslint-disable-next-line no-console
         console.warn(`OK, doing nothing... ${chalk.bold.green('done')}`)

@@ -1,5 +1,5 @@
 import { ListBaseCommand } from '../../base/list-base-command'
-import { CliUx } from '@oclif/core'
+import { ux } from '@oclif/core'
 import chalk from 'chalk'
 
 export default class EpList extends ListBaseCommand<typeof EpList> {
@@ -21,10 +21,10 @@ export default class EpList extends ListBaseCommand<typeof EpList> {
     })
 
     if (eps.length === 0) {
-      CliUx.ux.action.stop(chalk.bold.red('none found'))
+      ux.action.stop(chalk.bold.red('none found'))
       this.exit(0)
     }
-    CliUx.ux.action.stop(chalk.bold.green(`got ${eps.length}`))
+    ux.action.stop(chalk.bold.green(`got ${eps.length}`))
 
     if (this.flags.json) {
       await this.printJsonAndExit(eps)

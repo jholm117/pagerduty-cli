@@ -1,5 +1,5 @@
 import { ListBaseCommand } from '../../base/list-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import getStream from 'get-stream'
 import * as utils from '../../utils'
@@ -61,7 +61,7 @@ export default class UserLog extends ListBaseCommand<typeof UserLog> {
 
     let user_ids: string[] = []
     if (this.flags.email || this.flags.exact_email || this.flags.name) {
-      CliUx.ux.action.start('Getting user IDs from PD')
+      ux.action.start('Getting user IDs from PD')
       let users = await this.pd.fetchWithSpinner('users', {
         params: { query: this.flags.email || this.flags.exact_email || this.flags.name },
         activityDescription: 'Getting user IDs from PD',
@@ -70,7 +70,7 @@ export default class UserLog extends ListBaseCommand<typeof UserLog> {
         users = users.filter((user: any) => user.email === this.flags.exact_email)
       }
       if (!users || users.length === 0) {
-        CliUx.ux.action.stop(chalk.bold.red('none found'))
+        ux.action.stop(chalk.bold.red('none found'))
       }
       user_ids = users.map((e: { id: any }) => e.id)
     }
@@ -91,7 +91,7 @@ export default class UserLog extends ListBaseCommand<typeof UserLog> {
     }
     let log_entries: any[] = []
     for (const user_id of user_ids) {
-      CliUx.ux.action.start(`Getting log entries for user ${chalk.bold.blue(user_id)}`)
+      ux.action.start(`Getting log entries for user ${chalk.bold.blue(user_id)}`)
       // eslint-disable-next-line no-await-in-loop
       const r = await this.pd.fetchWithSpinner(`users/${user_id}/log_entries`, {
         params: params,

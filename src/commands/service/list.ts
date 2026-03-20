@@ -1,5 +1,5 @@
 import { ListBaseCommand } from '../../base/list-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 
 export default class ServiceList extends ListBaseCommand<typeof ServiceList> {
@@ -25,7 +25,7 @@ export default class ServiceList extends ListBaseCommand<typeof ServiceList> {
     }
 
     if (this.flags.teams) {
-      CliUx.ux.action.start('Finding teams')
+      ux.action.start('Finding teams')
       let teams: any[] = []
       for (const name of this.flags.teams) {
         // eslint-disable-next-line no-await-in-loop
@@ -34,7 +34,7 @@ export default class ServiceList extends ListBaseCommand<typeof ServiceList> {
       }
       const team_ids = [...new Set(teams.map(x => x.id))]
       if (team_ids.length === 0) {
-        CliUx.ux.action.stop(chalk.bold.red('none found'))
+        ux.action.stop(chalk.bold.red('none found'))
         this.error('No teams found. Please check your search.', { exit: 1 })
       }
       params.team_ids = team_ids

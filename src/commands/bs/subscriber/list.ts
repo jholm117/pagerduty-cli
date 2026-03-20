@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 
 export default class BsSubscriberList extends AuthenticatedBaseCommand<typeof BsSubscriberList> {
@@ -26,7 +26,7 @@ export default class BsSubscriberList extends AuthenticatedBaseCommand<typeof Bs
       description: 'Print subscriber ID\'s only to stdout, for use with pipes.',
       exclusive: ['columns', 'sort', 'csv', 'extended', 'json'],
     }),
-    ...CliUx.ux.table.Flags,
+    ...ux.table.Flags,
   }
 
   async run() {

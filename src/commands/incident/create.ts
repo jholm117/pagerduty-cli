@@ -1,7 +1,8 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import * as utils from '../../utils'
+import open from 'open'
 
 export default class IncidentCreate extends AuthenticatedBaseCommand<typeof IncidentCreate> {
   static description = 'Create a PagerDuty Incident'
@@ -113,10 +114,10 @@ export default class IncidentCreate extends AuthenticatedBaseCommand<typeof Inci
     }
 
     if (this.flags.priority) {
-      CliUx.ux.action.start('Getting incident priorities from PD')
+      ux.action.start('Getting incident priorities from PD')
       const priorities_map = await this.pd.getPrioritiesMapByName()
       if (Object.keys(priorities_map).length === 0) {
-        CliUx.ux.action.stop(chalk.bold.red('none found'))
+        ux.action.stop(chalk.bold.red('none found'))
       }
       if (priorities_map[this.flags.priority]) {
         incident.incident.priority = {
@@ -135,7 +136,7 @@ export default class IncidentCreate extends AuthenticatedBaseCommand<typeof Inci
       }
       incident.incident.service.id = this.flags.service_id
     } else if (this.flags.service) {
-      CliUx.ux.action.start('Finding service in PD')
+      ux.action.start('Finding service in PD')
       let services = await this.pd.fetch('services', { params: { query: this.flags.service } })
       services = services.filter((e: { name: string | undefined }) => {
         return e.name === this.flags.service
@@ -158,7 +159,7 @@ export default class IncidentCreate extends AuthenticatedBaseCommand<typeof Inci
         id: this.flags.escalation_policy_id,
       }
     } else if (this.flags.escalation_policy) {
-      CliUx.ux.action.start('Finding escalation policy in PD')
+      ux.action.start('Finding escalation policy in PD')
       let eps = await this.pd.fetch('escalation_policies', { params: { query: this.flags.escalation_policy } })
       eps = eps.filter((e: { name: string | undefined }) => {
         return e.name === this.flags.escalation_policy
@@ -174,11 +175,11 @@ export default class IncidentCreate extends AuthenticatedBaseCommand<typeof Inci
 
     if (this.flags.user) {
       for (const email of this.flags.user) {
-        CliUx.ux.action.start(`Finding user ${chalk.bold.blue(email)}`)
+        ux.action.start(`Finding user ${chalk.bold.blue(email)}`)
         // eslint-disable-next-line no-await-in-loop
         const user: any = await this.pd.userIDForEmail(email)
         if (!user) {
-          CliUx.ux.action.stop(chalk.bold.red('failed!'))
+          ux.action.stop(chalk.bold.red('failed!'))
           this.error(`No user was found for email ${email}`, { exit: 1 })
         }
         if (!incident.incident.assignments) {
@@ -193,7 +194,7 @@ export default class IncidentCreate extends AuthenticatedBaseCommand<typeof Inci
       }
     }
 
-    CliUx.ux.action.start('Creating PagerDuty incident')
+    ux.action.start('Creating PagerDuty incident')
     // const r = await pd.request(token, 'incidents', 'POST', null, incident, headers)
     const r = await this.pd.request({
       endpoint: 'incidents',
@@ -204,20 +205,20 @@ export default class IncidentCreate extends AuthenticatedBaseCommand<typeof Inci
     if (r.isFailure) {
       this.error(`Failed to create incident: ${r.getFormattedError()}`, { exit: 1 })
     }
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
     const returned_incident = r.getData()
 
     if (this.flags.pipe) {
       this.log(returned_incident.incident.id)
     } else if (this.flags.open) {
-      CliUx.ux.action.start(`Opening ${chalk.bold.blue(returned_incident.incident.html_url)} in the browser`)
+      ux.action.start(`Opening ${chalk.bold.blue(returned_incident.incident.html_url)} in the browser`)
       try {
-        await CliUx.ux.open(returned_incident.incident.html_url)
+        await open(returned_incident.incident.html_url)
       } catch (error) {
-        CliUx.ux.action.stop(chalk.bold.red('failed!'))
+        ux.action.stop(chalk.bold.red('failed!'))
         this.error('Couldn\'t open your browser. Are you running as root?', { exit: 1 })
       }
-      CliUx.ux.action.stop(chalk.bold.green('done'))
+      ux.action.stop(chalk.bold.green('done'))
     } else {
       this.log(`Your new incident is at ${chalk.bold.blue(returned_incident.incident.html_url)}`)
     }

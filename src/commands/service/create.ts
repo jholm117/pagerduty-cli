@@ -1,8 +1,9 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import * as utils from '../../utils'
 import * as chrono from 'chrono-node'
+import open from 'open'
 
 export default class ServiceCreate extends AuthenticatedBaseCommand<typeof ServiceCreate> {
   static description = 'Create a PagerDuty Service'
@@ -257,7 +258,7 @@ export default class ServiceCreate extends AuthenticatedBaseCommand<typeof Servi
       }
     }
 
-    CliUx.ux.action.start('Creating a PagerDuty service')
+    ux.action.start('Creating a PagerDuty service')
     const r = await this.pd.request({
       endpoint: 'services',
       method: 'POST',
@@ -265,24 +266,24 @@ export default class ServiceCreate extends AuthenticatedBaseCommand<typeof Servi
       headers: headers,
     })
     if (r.isFailure) {
-      CliUx.ux.action.stop(chalk.bold.red('failed!'))
+      ux.action.stop(chalk.bold.red('failed!'))
       this.error(`Failed to create service: ${r.getFormattedError()}`, { exit: 1 })
     }
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
     const returned_service = r.getData()
 
     if (this.flags.pipe) {
       this.log(returned_service.service.id)
     } else if (this.flags.open) {
-      await CliUx.ux.wait(1000)
-      CliUx.ux.action.start(`Opening ${chalk.bold.blue(returned_service.service.html_url)} in the browser`)
+      await ux.wait(1000)
+      ux.action.start(`Opening ${chalk.bold.blue(returned_service.service.html_url)} in the browser`)
       try {
-        await CliUx.ux.open(returned_service.service.html_url)
+        await open(returned_service.service.html_url)
       } catch (error) {
-        CliUx.ux.action.stop(chalk.bold.red('failed!'))
+        ux.action.stop(chalk.bold.red('failed!'))
         this.error('Couldn\'t open your browser. Are you running as root?', { exit: 1 })
       }
-      CliUx.ux.action.stop(chalk.bold.green('done'))
+      ux.action.stop(chalk.bold.green('done'))
     } else {
       this.log(`Your new service is at ${chalk.bold.blue(returned_service.service.html_url)}`)
     }

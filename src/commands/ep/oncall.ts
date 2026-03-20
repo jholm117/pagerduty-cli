@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import * as utils from '../../utils'
 import * as chrono from 'chrono-node'
@@ -39,7 +39,7 @@ export default class EpOncall extends AuthenticatedBaseCommand<typeof EpOncall> 
       description: 'output full details as JSON',
       exclusive: ['columns', 'filter', 'sort', 'csv', 'extended'],
     }),
-    ...CliUx.ux.table.flags(),
+    ...ux.table.flags(),
   }
 
   public async init(): Promise<void> {
@@ -62,10 +62,10 @@ export default class EpOncall extends AuthenticatedBaseCommand<typeof EpOncall> 
       }
       EPID = this.flags.id
     } else if (this.flags.name) {
-      CliUx.ux.action.start(`Finding PD escalation policy ${chalk.bold.blue(this.flags.name)}`)
+      ux.action.start(`Finding PD escalation policy ${chalk.bold.blue(this.flags.name)}`)
       EPID = await this.pd.epIDForName(this.flags.name)
       if (!EPID) {
-        CliUx.ux.action.stop(chalk.bold.red('failed!'))
+        ux.action.stop(chalk.bold.red('failed!'))
         this.error(`No EP was found with the name "${this.flags.name}"`, { exit: 1 })
       }
     } else {

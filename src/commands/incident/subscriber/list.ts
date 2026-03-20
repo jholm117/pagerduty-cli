@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import getStream from 'get-stream'
 import * as utils from '../../../utils'
@@ -25,7 +25,7 @@ export default class IncidentSubscriberList extends AuthenticatedBaseCommand<typ
       description: 'Read incident ID\'s from stdin.',
       exclusive: ['me', 'ids'],
     }),
-    ...CliUx.ux.table.Flags,
+    ...ux.table.Flags,
   }
 
   async run() {
@@ -39,11 +39,11 @@ export default class IncidentSubscriberList extends AuthenticatedBaseCommand<typ
     if (this.flags.me) {
       const me = await this.me(true)
       const params = { user_ids: [me.user.id] }
-      CliUx.ux.action.start('Getting incidents from PD')
+      ux.action.start('Getting incidents from PD')
       const incidents = await this.pd.fetch('incidents', { params: params })
 
       if (incidents.length === 0) {
-        CliUx.ux.action.stop(chalk.bold.red('none found'))
+        ux.action.stop(chalk.bold.red('none found'))
         this.exit(1)
       }
       incident_ids = incidents.map((e: { id: any }) => e.id)
@@ -93,7 +93,7 @@ export default class IncidentSubscriberList extends AuthenticatedBaseCommand<typ
       }))
       rows.push(...subs)
     }
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
 
     // await this.printJsonAndExit(rows)
 

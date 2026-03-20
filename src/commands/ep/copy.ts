@@ -1,7 +1,8 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import * as utils from '../../utils'
+import open from 'open'
 
 export default class EpCopy extends AuthenticatedBaseCommand<typeof EpCopy> {
   static description = 'Make a copy of a PagerDuty Escalation Policy'
@@ -55,13 +56,13 @@ export default class EpCopy extends AuthenticatedBaseCommand<typeof EpCopy> {
       this.error('No escalation policy specified', { exit: 1 })
     }
 
-    CliUx.ux.action.start(`Getting escalation policy ${chalk.bold.blue(ep_id)}`)
+    ux.action.start(`Getting escalation policy ${chalk.bold.blue(ep_id)}`)
     let r = await this.pd.request({
       endpoint: `escalation_policies/${ep_id}`,
       method: 'GET',
     })
     if (r.isFailure) {
-      CliUx.ux.action.stop(chalk.bold.red('failed!'))
+      ux.action.stop(chalk.bold.red('failed!'))
       this.error(`Couldn't get escalation policy ${chalk.bold.blue(ep_id)}: ${r.getFormattedError()}`)
     }
 
@@ -77,30 +78,30 @@ export default class EpCopy extends AuthenticatedBaseCommand<typeof EpCopy> {
         escalation_rules: escalation_rules,
       },
     }
-    CliUx.ux.action.start(`Copying escalation policy ${chalk.bold.blue(ep_id)}`)
+    ux.action.start(`Copying escalation policy ${chalk.bold.blue(ep_id)}`)
     r = await this.pd.request({
       endpoint: 'escalation_policies',
       method: 'POST',
       data: dest_ep,
     })
     if (r.isFailure) {
-      CliUx.ux.action.stop(chalk.bold.red('failed!'))
+      ux.action.stop(chalk.bold.red('failed!'))
       this.error(`Couldn't create escalation policy: ${r.getFormattedError()}`)
     }
     const returned_ep = r.getData()
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
 
     if (this.flags.pipe) {
       this.log(returned_ep.escalation_policy.id)
     } else if (this.flags.open) {
-      CliUx.ux.action.start(`Opening ${chalk.bold.blue(returned_ep.escalation_policy.html_url)} in the browser`)
+      ux.action.start(`Opening ${chalk.bold.blue(returned_ep.escalation_policy.html_url)} in the browser`)
       try {
-        await CliUx.ux.open(returned_ep.escalation_policy.html_url)
+        await open(returned_ep.escalation_policy.html_url)
       } catch (error) {
-        CliUx.ux.action.stop(chalk.bold.red('failed!'))
+        ux.action.stop(chalk.bold.red('failed!'))
         this.error('Couldn\'t open your browser. Are you running as root?', { exit: 1 })
       }
-      CliUx.ux.action.stop(chalk.bold.green('done'))
+      ux.action.stop(chalk.bold.green('done'))
     } else {
       this.log(`Your new escalation policy is at ${chalk.bold.blue(returned_ep.escalation_policy.html_url)}`)
     }

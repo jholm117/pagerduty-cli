@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../../../base/authenticated-base-command'
-import {CliUx, Flags} from '@oclif/core'
+import {ux, Flags} from '@oclif/core'
 import chalk from 'chalk'
 
 export default class FieldSchemaAssignmentRemove extends AuthenticatedBaseCommand<typeof FieldSchemaAssignmentRemove> {
@@ -22,7 +22,7 @@ export default class FieldSchemaAssignmentRemove extends AuthenticatedBaseComman
       id: assignment_id,
     } = this.flags
 
-    CliUx.ux.action.start(`Removing PagerDuty field schema assignment ${chalk.bold.blue(assignment_id)}`)
+    ux.action.start(`Removing PagerDuty field schema assignment ${chalk.bold.blue(assignment_id)}`)
     const r = await this.pd.request({
       endpoint: `customfields/schema_assignments/${assignment_id}`,
       method: 'DELETE',
@@ -31,6 +31,6 @@ export default class FieldSchemaAssignmentRemove extends AuthenticatedBaseComman
     if (r.isFailure) {
       this.error(`Request failed: ${r.getFormattedError()}`, {exit: 1})
     }
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
   }
 }

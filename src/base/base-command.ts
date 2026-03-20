@@ -1,4 +1,4 @@
-import { Command, Flags, Interfaces, CliUx } from '@oclif/core'
+import { Command, Flags, Interfaces, ux } from '@oclif/core'
 import { Config } from '../config'
 import { PD } from '../pd'
 import * as utils from '../utils'
@@ -18,7 +18,7 @@ export abstract class BaseCommand<T extends typeof Command> extends Command {
   }
 
   static get usage(): any {
-    const cmd = this as Interfaces.Command
+    const cmd = this as unknown as Command.Cached
     return cmd.id.split(':').join(' ')
   }
 
@@ -37,8 +37,8 @@ export abstract class BaseCommand<T extends typeof Command> extends Command {
 
   public async init(): Promise<void> {
     await super.init()
-    const { flags } = await this.parse(this.constructor as Interfaces.Command.Class)
-    this.flags = flags
+    const { flags } = await this.parse(this.constructor as unknown as Command.Class)
+    this.flags = flags as Flags<T>
 
     this._config = new Config()
     this.token = this._config.token()
@@ -90,7 +90,7 @@ export abstract class BaseCommand<T extends typeof Command> extends Command {
     if (process.stdout.write(json)) {
       process.exit(0)
     }
-    await CliUx.ux.wait(10000)
+    await ux.wait(10000)
     console.error('Timed out waiting for pipe', {exit: 1})
   }
 
@@ -114,7 +114,7 @@ export abstract class BaseCommand<T extends typeof Command> extends Command {
           console.log(str.trim())
         },
       }
-      CliUx.ux.table(rows, _columns, options)
+      ux.table(rows, _columns, options)
       return
     }
     if (flags.keys) {
@@ -133,7 +133,7 @@ export abstract class BaseCommand<T extends typeof Command> extends Command {
         }
       }
     }
-    CliUx.ux.table(rows, _columns, { ...flags })
+    ux.table(rows, _columns, { ...flags })
   }
 
   protected async catch(err: Error & { exitCode?: number }): Promise<any> {

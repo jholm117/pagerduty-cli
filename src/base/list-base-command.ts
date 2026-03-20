@@ -1,4 +1,4 @@
-import { Command, Flags, Interfaces, CliUx } from '@oclif/core'
+import { Command, Flags, Interfaces, ux } from '@oclif/core'
 import { AuthenticatedBaseCommand } from './authenticated-base-command'
 
 export type Flags<T extends typeof Command> = Interfaces.InferredFlags<typeof ListBaseCommand['globalFlags'] & T['flags']>
@@ -35,7 +35,7 @@ export abstract class ListBaseCommand<T extends typeof Command> extends Authenti
       description: 'Delimiter for fields that have more than one value',
       default: '\\n',
     }),
-    ...CliUx.ux.table.flags(),
+    ...ux.table.flags(),
   }
 
   protected flags!: Flags<T>

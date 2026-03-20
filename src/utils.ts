@@ -1,4 +1,4 @@
-import {CliUx} from '@oclif/core'
+import {ux} from '@oclif/core'
 
 /* eslint-disable no-process-exit */
 /* eslint-disable unicorn/no-process-exit */

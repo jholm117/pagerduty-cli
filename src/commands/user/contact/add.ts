@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import parsePhoneNumber from 'libphonenumber-js'
 
@@ -40,10 +40,10 @@ export default class UserContactAdd extends AuthenticatedBaseCommand<typeof User
     if (this.flags.id) {
       userID = this.flags.id
     } else if (this.flags.email) {
-      CliUx.ux.action.start(`Finding PD user ${chalk.bold.blue(this.flags.email)}`)
+      ux.action.start(`Finding PD user ${chalk.bold.blue(this.flags.email)}`)
       userID = await this.pd.userIDForEmail(this.flags.email)
       if (!userID) {
-        CliUx.ux.action.stop(chalk.bold.red('failed!'))
+        ux.action.stop(chalk.bold.red('failed!'))
         this.error(`No user was found for the email "${this.flags.email}"`, { exit: 1 })
       }
     } else {
@@ -65,17 +65,17 @@ export default class UserContactAdd extends AuthenticatedBaseCommand<typeof User
       body.contact_method.address = this.flags.address
     }
 
-    CliUx.ux.action.start(`Adding ${chalk.bold.blue(this.flags.type)} contact method for user ${chalk.bold.blue(userID)}`)
+    ux.action.start(`Adding ${chalk.bold.blue(this.flags.type)} contact method for user ${chalk.bold.blue(userID)}`)
     const r = await this.pd.request({
       endpoint: `users/${userID}/contact_methods`,
       method: 'POST',
       data: body,
     })
     if (r.isFailure) {
-      CliUx.ux.action.stop(chalk.bold.red('failed!'))
+      ux.action.stop(chalk.bold.red('failed!'))
       this.error(`Request failed: ${r.getFormattedError}`, { exit: 1 })
     }
     const contact_method = r.getData()
-    CliUx.ux.action.stop(`${chalk.bold.green('created contact method')} ${chalk.bold.blue(contact_method.contact_method.id)}`)
+    ux.action.stop(`${chalk.bold.green('created contact method')} ${chalk.bold.blue(contact_method.contact_method.id)}`)
   }
 }

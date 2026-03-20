@@ -1,8 +1,9 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import getStream from 'get-stream'
 import * as utils from '../../utils'
+import open from 'open'
 
 export default class TeamOpen extends AuthenticatedBaseCommand<typeof TeamOpen> {
   static description = 'Open PagerDuty Teams in the browser'
@@ -32,10 +33,10 @@ export default class TeamOpen extends AuthenticatedBaseCommand<typeof TeamOpen> 
     let team_ids = []
     if (this.flags.name) {
       params.query = this.flags.name
-      CliUx.ux.action.start('Finding teams in PD')
+      ux.action.start('Finding teams in PD')
       const teams = await this.pd.fetch('teams', { params: params })
       if (teams.length === 0) {
-        CliUx.ux.action.stop(chalk.bold.red('no teams found matching ') + chalk.bold.blue(this.flags.name))
+        ux.action.stop(chalk.bold.red('no teams found matching ') + chalk.bold.blue(this.flags.name))
         this.exit(0)
       }
       for (const team of teams) {
@@ -54,25 +55,25 @@ export default class TeamOpen extends AuthenticatedBaseCommand<typeof TeamOpen> 
       this.error('You must specify one of: -i, -n, -p', { exit: 1 })
     }
     if (team_ids.length === 0) {
-      CliUx.ux.action.stop(chalk.bold.red('no teams specified'))
+      ux.action.stop(chalk.bold.red('no teams specified'))
       this.exit(0)
     }
-    CliUx.ux.action.start('Finding your PD domain')
+    ux.action.start('Finding your PD domain')
     const domain = await this.pd.domain()
 
     this.log('Team URLs:')
     const urlstrings: string[] = team_ids.map(x => chalk.bold.blue(`https://${domain}.pagerduty.com/teams/${x}`))
     this.log(urlstrings.join('\n') + '\n')
 
-    CliUx.ux.action.start('Opening your browser')
+    ux.action.start('Opening your browser')
     try {
       for (const team_id of team_ids) {
-        await CliUx.ux.open(`https://${domain}.pagerduty.com/teams/${team_id}`)
+        await open(`https://${domain}.pagerduty.com/teams/${team_id}`)
       }
     } catch (error) {
-      CliUx.ux.action.stop(chalk.bold.red('failed!'))
+      ux.action.stop(chalk.bold.red('failed!'))
       this.error('Couldn\'t open browser. Are you running as root?', { exit: 1 })
     }
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
   }
 }

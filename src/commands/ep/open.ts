@@ -1,8 +1,9 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import getStream from 'get-stream'
 import * as utils from '../../utils'
+import open from 'open'
 
 export default class EpOpen extends AuthenticatedBaseCommand<typeof EpOpen> {
   static description = 'Open PagerDuty Escalation policies in the browser'
@@ -61,22 +62,22 @@ export default class EpOpen extends AuthenticatedBaseCommand<typeof EpOpen> {
       this.error('No escalation policies specified', { exit: 1 })
     }
 
-    CliUx.ux.action.start('Finding your PD domain')
+    ux.action.start('Finding your PD domain')
     const domain = await this.pd.domain()
 
     this.log('Escalation Policy URLs:')
     const urlstrings: string[] = ep_ids.map(x => chalk.bold.blue(`https://${domain}.pagerduty.com/escalation_policies/${x}`))
     this.log(urlstrings.join('\n') + '\n')
 
-    CliUx.ux.action.start(`Opening ${ep_ids.length} escalation policies in the browser`)
+    ux.action.start(`Opening ${ep_ids.length} escalation policies in the browser`)
     try {
       for (const ep_id of ep_ids) {
-        await CliUx.ux.open(`https://${domain}.pagerduty.com/escalation_policies/${ep_id}`)
+        await open(`https://${domain}.pagerduty.com/escalation_policies/${ep_id}`)
       }
     } catch (error) {
-      CliUx.ux.action.stop(chalk.bold.red('failed'))
+      ux.action.stop(chalk.bold.red('failed'))
       this.error('Couldn\'t open browser. Are you running as root?', { exit: 1 })
     }
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
   }
 }

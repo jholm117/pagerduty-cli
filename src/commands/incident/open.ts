@@ -1,8 +1,9 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import getStream from 'get-stream'
 import * as utils from '../../utils'
+import open from 'open'
 
 export default class IncidentOpen extends AuthenticatedBaseCommand<typeof IncidentOpen> {
   static description = 'Open PagerDuty Incidents in your browser'
@@ -48,24 +49,24 @@ export default class IncidentOpen extends AuthenticatedBaseCommand<typeof Incide
       this.error('You must specify one of: -i, -m, -p', { exit: 1 })
     }
 
-    CliUx.ux.action.start('Finding your PD domain')
+    ux.action.start('Finding your PD domain')
     const domain = await this.pd.domain()
 
     this.log('Incident URLs:')
     const urlstrings: string[] = incident_ids.map(x => chalk.bold.blue(`https://${domain}.pagerduty.com/incidents/${x}`))
     this.log(urlstrings.join('\n') + '\n')
 
-    CliUx.ux.action.start(`Opening ${incident_ids.length} incidents in the browser`)
+    ux.action.start(`Opening ${incident_ids.length} incidents in the browser`)
 
     try {
       for (const incident_id of incident_ids) {
-        await CliUx.ux.open(`https://${domain}.pagerduty.com/incidents/${incident_id}`)
+        await open(`https://${domain}.pagerduty.com/incidents/${incident_id}`)
       }
     } catch (error) {
-      CliUx.ux.action.stop(chalk.bold.red('failed!'))
+      ux.action.stop(chalk.bold.red('failed!'))
       this.error('Couldn\'t open your browser. Are you running as root?', { exit: 1 })
     }
 
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
   }
 }

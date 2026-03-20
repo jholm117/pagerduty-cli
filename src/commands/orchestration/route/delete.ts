@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../../base/authenticated-base-command'
-import { Flags, CliUx } from '@oclif/core'
+import { Flags, ux } from '@oclif/core'
 import chalk from 'chalk'
 
 export default class OrchestrationRouteDelete extends AuthenticatedBaseCommand<typeof OrchestrationRouteDelete> {
@@ -52,13 +52,13 @@ export default class OrchestrationRouteDelete extends AuthenticatedBaseCommand<t
       }
     }
 
-    CliUx.ux.action.start(`Getting routes for orchestration ${chalk.bold.blue(this.flags.id)}`)
+    ux.action.start(`Getting routes for orchestration ${chalk.bold.blue(this.flags.id)}`)
     r = await this.pd.request({
       endpoint: `event_orchestrations/${this.flags.id}/router`,
     })
 
     if (r.isFailure) {
-      CliUx.ux.action.stop(chalk.bold.red('failed!'))
+      ux.action.stop(chalk.bold.red('failed!'))
       this.error(`${chalk.bold.red('Failed to get orchestration ')}${chalk.bold.blue(this.flags.id)}: ${r.getFormattedError()}`, { exit: 1 })
     }
 
@@ -88,16 +88,16 @@ export default class OrchestrationRouteDelete extends AuthenticatedBaseCommand<t
     newOrchestration.orchestration_path.sets[0].rules = rules
 
     const howManyRoutes = `${rulesToDelete.length} route${rulesToDelete.length > 1 ? 's' : ''}`
-    CliUx.ux.action.start(`Deleting ${chalk.bold.blue(howManyRoutes)} in orchestration ${chalk.bold.blue(this.flags.id)}`)
+    ux.action.start(`Deleting ${chalk.bold.blue(howManyRoutes)} in orchestration ${chalk.bold.blue(this.flags.id)}`)
     r = await this.pd.request({
       method: 'PUT',
       endpoint: `event_orchestrations/${this.flags.id}/router`,
       data: newOrchestration,
     })
     if (r.isFailure) {
-      CliUx.ux.action.stop(chalk.bold.red('failed!'))
+      ux.action.stop(chalk.bold.red('failed!'))
       this.error(`${chalk.bold.red('Failed to update orchestration ')}${chalk.bold.blue(this.flags.id)}: ${r.getFormattedError()}`, { exit: 1 })
     }
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
   }
 }

@@ -1,12 +1,12 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import { PD } from '../../pd'
 
 export default class ScheduleListDeletedUsers extends AuthenticatedBaseCommand<typeof ScheduleListDeletedUsers> {
   static description = 'List deleted users in all PagerDuty Schedules'
 
   static flags = {
-    ...CliUx.ux.table.Flags,
+    ...ux.table.Flags,
   }
 
   async run() {

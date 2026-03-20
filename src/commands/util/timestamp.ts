@@ -1,4 +1,5 @@
 import { BaseCommand } from '../../base/base-command'
+import { Args } from '@oclif/core'
 import * as chrono from 'chrono-node'
 
 export default class UtilTimestamp extends BaseCommand<typeof UtilTimestamp> {
@@ -6,12 +7,11 @@ export default class UtilTimestamp extends BaseCommand<typeof UtilTimestamp> {
 
   static strict = false
 
-  static args = [
-    {
-      name: 'date',
+  static args = {
+    date: Args.string({
       description: 'A human-style date/time, like "4pm 1/1/2021" or "Dec 2 1pm", etc. Default: now',
-    },
-  ]
+    }),
+  }
 
   async run() {
     let dateObj

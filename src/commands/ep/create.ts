@@ -1,7 +1,8 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import * as utils from '../../utils'
+import open from 'open'
 
 export default class EpCreate extends AuthenticatedBaseCommand<typeof EpCreate> {
   static description = 'Create a PagerDuty Escalation Policy with a single level. You can add levels and targets later with ep:level and ep:target'
@@ -148,20 +149,20 @@ export default class EpCreate extends AuthenticatedBaseCommand<typeof EpCreate> 
     if (r.isFailure) {
       this.error(`Failed to create escalation policy: ${r.getFormattedError()}`, { exit: 1 })
     }
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
     const returned_ep = r.getData()
 
     if (this.flags.pipe) {
       this.log(returned_ep.escalation_policy.id)
     } else if (this.flags.open) {
-      CliUx.ux.action.start(`Opening ${chalk.bold.blue(returned_ep.escalation_policy.html_url)} in the browser`)
+      ux.action.start(`Opening ${chalk.bold.blue(returned_ep.escalation_policy.html_url)} in the browser`)
       try {
-        await CliUx.ux.open(returned_ep.escalation_policy.html_url)
+        await open(returned_ep.escalation_policy.html_url)
       } catch (error) {
-        CliUx.ux.action.stop(chalk.bold.red('failed!'))
+        ux.action.stop(chalk.bold.red('failed!'))
         this.error('Couldn\'t open your browser. Are you running as root?', { exit: 1 })
       }
-      CliUx.ux.action.stop(chalk.bold.green('done'))
+      ux.action.stop(chalk.bold.green('done'))
     } else {
       this.log(`Your new escalation policy is at ${chalk.bold.blue(returned_ep.escalation_policy.html_url)}`)
     }

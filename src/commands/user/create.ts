@@ -1,6 +1,7 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
+import open from 'open'
 
 export default class UserCreate extends AuthenticatedBaseCommand<typeof UserCreate> {
   static description = 'Create a PagerDuty User'
@@ -91,7 +92,7 @@ export default class UserCreate extends AuthenticatedBaseCommand<typeof UserCrea
       user.user.password = Math.random().toString(16).split('.').pop()
     }
 
-    CliUx.ux.action.start('Creating PagerDuty user' + (this.flags.show_password ? ` with password ${chalk.bold.blue(user.user.password)}` : ''))
+    ux.action.start('Creating PagerDuty user' + (this.flags.show_password ? ` with password ${chalk.bold.blue(user.user.password)}` : ''))
     const r = await this.pd.request({
       endpoint: 'users',
       method: 'POST',
@@ -101,20 +102,20 @@ export default class UserCreate extends AuthenticatedBaseCommand<typeof UserCrea
     if (r.isFailure) {
       this.error(`Failed to create user: ${r.getFormattedError()}`, { exit: 1 })
     }
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
     const returned_user = r.getData()
 
     if (this.flags.pipe) {
       this.log(returned_user.user.id)
     } else if (this.flags.open) {
-      CliUx.ux.action.start(`Opening ${chalk.bold.blue(returned_user.user.html_url)} in the browser`)
+      ux.action.start(`Opening ${chalk.bold.blue(returned_user.user.html_url)} in the browser`)
       try {
-        await CliUx.ux.open(returned_user.user.html_url)
+        await open(returned_user.user.html_url)
       } catch (error) {
-        CliUx.ux.action.stop(chalk.bold.red('failed!'))
+        ux.action.stop(chalk.bold.red('failed!'))
         this.error('Couldn\'t open your browser. Are you running as root?', { exit: 1 })
       }
-      CliUx.ux.action.stop(chalk.bold.green('done'))
+      ux.action.stop(chalk.bold.green('done'))
     } else {
       this.log(`Your new user is at ${chalk.bold.blue(returned_user.user.html_url)}`)
     }

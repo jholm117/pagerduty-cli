@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import parsePhoneNumber from 'libphonenumber-js'
 
@@ -44,7 +44,7 @@ export default class UserContactList extends AuthenticatedBaseCommand<typeof Use
       description: 'Delimiter for fields that have more than one value',
       default: '\\n',
     }),
-    ...CliUx.ux.table.flags(),
+    ...ux.table.flags(),
   }
 
   public async init(): Promise<void> {
@@ -62,10 +62,10 @@ export default class UserContactList extends AuthenticatedBaseCommand<typeof Use
     if (this.flags.id) {
       userID = this.flags.id
     } else if (this.flags.email) {
-      CliUx.ux.action.start(`Finding PD user ${chalk.bold.blue(this.flags.email)}`)
+      ux.action.start(`Finding PD user ${chalk.bold.blue(this.flags.email)}`)
       userID = await this.pd.userIDForEmail(this.flags.email)
       if (!userID) {
-        CliUx.ux.action.stop(chalk.bold.red('failed!'))
+        ux.action.stop(chalk.bold.red('failed!'))
         this.error(`No user was found for the email "${this.flags.email}"`, { exit: 1 })
       }
     } else {

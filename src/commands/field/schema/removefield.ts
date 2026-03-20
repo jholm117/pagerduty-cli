@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../../base/authenticated-base-command'
-import {CliUx, Flags} from '@oclif/core'
+import {ux, Flags} from '@oclif/core'
 import chalk from 'chalk'
 
 export default class FieldSchemaRemoveField extends AuthenticatedBaseCommand<typeof FieldSchemaRemoveField> {
@@ -28,7 +28,7 @@ export default class FieldSchemaRemoveField extends AuthenticatedBaseCommand<typ
       'X-EARLY-ACCESS': 'flex-service-early-access',
     }
 
-    CliUx.ux.action.start('Getting schema field configurations')
+    ux.action.start('Getting schema field configurations')
     let r = await this.pd.request({
       endpoint: `customfields/schemas/${schema_id}`,
       method: 'GET',
@@ -38,10 +38,10 @@ export default class FieldSchemaRemoveField extends AuthenticatedBaseCommand<typ
       headers,
     })
     if (r.isFailure) {
-      CliUx.ux.action.stop(chalk.bold.red('failed!'))
+      ux.action.stop(chalk.bold.red('failed!'))
       this.error(`Failed to get schema ${schema_id}`, {exit: 1})
     }
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
 
     const schema = r.getData().schema
     const field_configurations = schema.field_configurations
@@ -59,7 +59,7 @@ export default class FieldSchemaRemoveField extends AuthenticatedBaseCommand<typ
       }
     }
 
-    CliUx.ux.action.start(`Deleting field ${chalk.bold.blue(field_id)} from schema ${chalk.bold.blue(schema_id)}`)
+    ux.action.start(`Deleting field ${chalk.bold.blue(field_id)} from schema ${chalk.bold.blue(schema_id)}`)
     r = await this.pd.request({
       endpoint: `customfields/schemas/${schema_id}`,
       method: 'PUT',
@@ -67,9 +67,9 @@ export default class FieldSchemaRemoveField extends AuthenticatedBaseCommand<typ
       headers,
     })
     if (r.isFailure) {
-      CliUx.ux.action.stop(chalk.bold.red('failed!'))
+      ux.action.stop(chalk.bold.red('failed!'))
       this.error(`Failed to remove field from schema: ${r.getFormattedError()}`, {exit: 1})
     }
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
   }
 }

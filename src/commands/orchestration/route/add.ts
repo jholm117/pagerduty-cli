@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../../base/authenticated-base-command'
-import { Flags, CliUx } from '@oclif/core'
+import { Flags, ux } from '@oclif/core'
 import chalk from 'chalk'
 
 export default class OrchestrationRouteAdd extends AuthenticatedBaseCommand<typeof OrchestrationRouteAdd> {
@@ -52,13 +52,13 @@ export default class OrchestrationRouteAdd extends AuthenticatedBaseCommand<type
       this.flags.service_id = servicesList[0].id
     }
 
-    CliUx.ux.action.start(`Getting routes for orchestration ${chalk.bold.blue(this.flags.id)}`)
+    ux.action.start(`Getting routes for orchestration ${chalk.bold.blue(this.flags.id)}`)
     let r = await this.pd.request({
       endpoint: `event_orchestrations/${this.flags.id}/router`,
     })
 
     if (r.isFailure) {
-      CliUx.ux.action.stop(chalk.bold.red('failed!'))
+      ux.action.stop(chalk.bold.red('failed!'))
       this.error(`${chalk.bold.red('Failed to get orchestration ')}${chalk.bold.blue(this.flags.id)}: ${r.getFormattedError()}`, { exit: 1 })
     }
 
@@ -82,16 +82,16 @@ export default class OrchestrationRouteAdd extends AuthenticatedBaseCommand<type
     }
     newOrchestration.orchestration_path.sets[0].rules.push(newRule)
 
-    CliUx.ux.action.start(`Adding a route in orchestration ${chalk.bold.blue(this.flags.id)}`)
+    ux.action.start(`Adding a route in orchestration ${chalk.bold.blue(this.flags.id)}`)
     r = await this.pd.request({
       method: 'PUT',
       endpoint: `event_orchestrations/${this.flags.id}/router`,
       data: newOrchestration,
     })
     if (r.isFailure) {
-      CliUx.ux.action.stop(chalk.bold.red('failed!'))
+      ux.action.stop(chalk.bold.red('failed!'))
       this.error(`${chalk.bold.red('Failed to update orchestration ')}${chalk.bold.blue(this.flags.id)}: ${r.getFormattedError()}`, { exit: 1 })
     }
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
   }
 }

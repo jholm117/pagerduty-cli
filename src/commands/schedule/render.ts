@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../base/authenticated-base-command'
-import {CliUx, Flags} from '@oclif/core'
+import {ux, Flags} from '@oclif/core'
 import chalk from 'chalk'
 import * as utils from '../../utils'
 import * as chrono from 'chrono-node'
@@ -39,7 +39,7 @@ export default class ScheduleRender extends AuthenticatedBaseCommand<typeof Sche
       description: 'Delimiter for fields that have more than one value',
       default: '\\n',
     }),
-    ...CliUx.ux.table.flags(),
+    ...ux.table.flags(),
   }
 
   public async init(): Promise<void> {
@@ -62,10 +62,10 @@ export default class ScheduleRender extends AuthenticatedBaseCommand<typeof Sche
       }
       scheduleID = this.flags.id
     } else if (this.flags.name) {
-      CliUx.ux.action.start(`Finding PD schedule ${chalk.bold.blue(this.flags.name)}`)
+      ux.action.start(`Finding PD schedule ${chalk.bold.blue(this.flags.name)}`)
       scheduleID = await this.pd.scheduleIDForName(this.flags.name)
       if (!scheduleID) {
-        CliUx.ux.action.stop(chalk.bold.red('failed!'))
+        ux.action.stop(chalk.bold.red('failed!'))
         this.error(`No schedule or multiple schedules found with the name "${this.flags.name}"`, {exit: 1})
       }
     } else {
@@ -85,13 +85,13 @@ export default class ScheduleRender extends AuthenticatedBaseCommand<typeof Sche
       }
     }
 
-    CliUx.ux.action.start(`Getting schedule ${chalk.bold.blue(scheduleID)}`)
+    ux.action.start(`Getting schedule ${chalk.bold.blue(scheduleID)}`)
     const r = await this.pd.request({
       endpoint: `schedules/${scheduleID}`,
       method: 'GET',
       params: params,
     })
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
     const schedule = r.getData().schedule
     const {
       id: schedule_id,

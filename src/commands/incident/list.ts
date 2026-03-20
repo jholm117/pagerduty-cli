@@ -1,5 +1,5 @@
 import { ListBaseCommand } from '../../base/list-base-command'
-import { Flags, CliUx } from '@oclif/core'
+import { Flags, ux } from '@oclif/core'
 import chalk from 'chalk'
 import * as chrono from 'chrono-node'
 import { PD } from '../../pd'
@@ -103,7 +103,7 @@ export default class IncidentList extends ListBaseCommand<typeof IncidentList> {
     }
 
     if (this.flags.assignees) {
-      CliUx.ux.action.start('Finding users')
+      ux.action.start('Finding users')
       for (const email of this.flags.assignees) {
         // eslint-disable-next-line no-await-in-loop
         const r = await this.pd.fetch('users', { params: { query: email } })
@@ -116,7 +116,7 @@ export default class IncidentList extends ListBaseCommand<typeof IncidentList> {
     }
 
     if (this.flags.exact_assignees) {
-      CliUx.ux.action.start('Finding users')
+      ux.action.start('Finding users')
       for (const email of this.flags.exact_assignees) {
         // eslint-disable-next-line no-await-in-loop
         const r = await this.pd.userIDForEmail(email)
@@ -138,7 +138,7 @@ export default class IncidentList extends ListBaseCommand<typeof IncidentList> {
     const team_ids: string[] = []
 
     if (this.flags.teams) {
-      CliUx.ux.action.start('Finding teams')
+      ux.action.start('Finding teams')
       for (const name of this.flags.teams) {
         // eslint-disable-next-line no-await-in-loop
         const r = await this.pd.fetch('teams', { params: { query: name } })
@@ -151,7 +151,7 @@ export default class IncidentList extends ListBaseCommand<typeof IncidentList> {
     }
 
     if (this.flags.exact_teams) {
-      CliUx.ux.action.start('Finding teams')
+      ux.action.start('Finding teams')
       for (const name of this.flags.exact_teams) {
         // eslint-disable-next-line no-await-in-loop
         const r = await this.pd.teamIDForName(name)
@@ -173,7 +173,7 @@ export default class IncidentList extends ListBaseCommand<typeof IncidentList> {
     const service_ids: string[] = []
 
     if (this.flags.services) {
-      CliUx.ux.action.start('Finding services')
+      ux.action.start('Finding services')
       for (const name of this.flags.services) {
         // eslint-disable-next-line no-await-in-loop
         const r = await this.pd.fetch('services', { params: { query: name } })
@@ -186,7 +186,7 @@ export default class IncidentList extends ListBaseCommand<typeof IncidentList> {
     }
 
     if (this.flags.exact_services) {
-      CliUx.ux.action.start('Finding services')
+      ux.action.start('Finding services')
       for (const name of this.flags.exact_services) {
         // eslint-disable-next-line no-await-in-loop
         const r = await this.pd.serviceIDForName(name)
@@ -218,10 +218,10 @@ export default class IncidentList extends ListBaseCommand<typeof IncidentList> {
       }
     }
 
-    CliUx.ux.action.start('Getting incident priorities from PD')
+    ux.action.start('Getting incident priorities from PD')
     const priorities_map = await this.pd.getPrioritiesMapByID()
     if (Object.keys(priorities_map).length === 0) {
-      CliUx.ux.action.stop(chalk.bold.red('none found'))
+      ux.action.stop(chalk.bold.red('none found'))
     }
 
     const incidents = await this.pd.fetchWithSpinner('incidents', {

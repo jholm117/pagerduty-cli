@@ -1,9 +1,10 @@
 import { BaseCommand } from '../../base/base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import { Config, CLIENT_ID, CLIENT_SECRET } from '../../config'
 import * as http from 'http'
 import { Socket } from 'node:net'
+import open from 'open'
 
 import {
   AccessToken,
@@ -62,7 +63,7 @@ export default class AuthWeb extends BaseCommand<typeof AuthWeb> {
     })
 
     try {
-      await CliUx.ux.open(authorizationUri)
+      await open(authorizationUri)
     } catch (error) {
       this.reportError(`Couldn't open a browser for web authentication: ${error}`)
     }
@@ -73,22 +74,22 @@ export default class AuthWeb extends BaseCommand<typeof AuthWeb> {
 
     try {
       this.server.listen(8000, () => {
-        CliUx.ux.action.start('Waiting for browser authentication')
+        ux.action.start('Waiting for browser authentication')
       })
     } catch (error) {
       this.reportError('Couldn\'t start a local server for web authentication')
     }
     try {
       const accessToken = await p
-      CliUx.ux.action.start('Checking token ' + chalk.bold.blue(accessToken.token.access_token))
+      ux.action.start('Checking token ' + chalk.bold.blue(accessToken.token.access_token))
       const result = await this.checkToken(accessToken)
       if (result) {
-        CliUx.ux.action.stop(chalk.bold.green('done'))
+        ux.action.stop(chalk.bold.green('done'))
       } else {
-        CliUx.ux.action.stop(chalk.bold.red('failed!'))
+        ux.action.stop(chalk.bold.red('failed!'))
       }
     } catch (error: any) {
-      CliUx.ux.action.stop(chalk.bold.red('failed!'))
+      ux.action.stop(chalk.bold.red('failed!'))
       this.reportError(error.toString())
     }
   }
@@ -118,7 +119,7 @@ export default class AuthWeb extends BaseCommand<typeof AuthWeb> {
 
   async cleanup() {
     this.server.close()
-    await CliUx.ux.wait(200)
+    await ux.wait(200)
     for (const socket of Object.values(this.sockets)) {
       socket.destroy()
     }
@@ -180,7 +181,7 @@ export default class AuthWeb extends BaseCommand<typeof AuthWeb> {
         : 'added'
       this._config.put(configSubdomain, this.flags.default)
       this._config.save()
-      CliUx.ux.action.stop(chalk.bold.green('done'))
+      ux.action.stop(chalk.bold.green('done'))
       if (this.flags.default) {
         this.log(
           `${chalk.bold(
@@ -202,7 +203,7 @@ export default class AuthWeb extends BaseCommand<typeof AuthWeb> {
       }
       return true
     } catch (error) {
-      CliUx.ux.action.stop(chalk.bold.red(`failed: ${error}`))
+      ux.action.stop(chalk.bold.red(`failed: ${error}`))
       return false
     }
   }

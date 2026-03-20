@@ -1,8 +1,9 @@
 import { AuthenticatedBaseCommand } from "../../../base/authenticated-base-command";
 import chalk from 'chalk'
-import { CliUx, Flags } from "@oclif/core";
+import { ux, Flags } from "@oclif/core";
 import * as utils from '../../../utils'
 import getStream from 'get-stream'
+import open from 'open'
 
 export default class AutomationRunnerCreate extends AuthenticatedBaseCommand<typeof AutomationRunnerCreate> {
   static description = 'Create a PagerDuty Automation Action'
@@ -74,7 +75,7 @@ export default class AutomationRunnerCreate extends AuthenticatedBaseCommand<typ
     }
     if (team_names) {
       for (const team_name of team_names) {
-        CliUx.ux.action.start(`Finding team ${chalk.bold.blue(team_name)}`)
+        ux.action.start(`Finding team ${chalk.bold.blue(team_name)}`)
         const team_id = await this.pd.teamIDForName(team_name)
         if (!team_id) {
           this.error(`Team name ${chalk.bold.blue(team_name)} wasn't found`, { exit: 1 })
@@ -95,14 +96,14 @@ export default class AutomationRunnerCreate extends AuthenticatedBaseCommand<typ
       }
     }
 
-    CliUx.ux.action.start(`Creating a ${chalk.bold.blue(runner_type === 'runbook' ? 'runbook automation' : 'process automation')} runner`)
+    ux.action.start(`Creating a ${chalk.bold.blue(runner_type === 'runbook' ? 'runbook automation' : 'process automation')} runner`)
     const r = await this.pd.request({
       endpoint: 'automation_actions/runners',
       method: 'POST',
       data: body
     })
     if (r.isSuccess) {
-      CliUx.ux.action.stop(chalk.bold.green('done'))
+      ux.action.stop(chalk.bold.green('done'))
       const runner = r.getData().runner
 
       if (this.flags.pipe) {
@@ -122,13 +123,13 @@ export default class AutomationRunnerCreate extends AuthenticatedBaseCommand<typ
       this.log(`Your new runner is at ${chalk.bold.blue(runner_url)}`)
       if (this.flags.open) {
         try {
-          await CliUx.ux.open(runner_url)
+          await open(runner_url)
         } catch (error) {
           this.error('Couldn\'t open your browser. Are you running as root?', { exit: 1 })
         }
       }
     } else {
-      CliUx.ux.action.stop(chalk.bold.red('failed!'))
+      ux.action.stop(chalk.bold.red('failed!'))
       this.error(r.getFormattedError(), { exit: 1 })
     }
   }

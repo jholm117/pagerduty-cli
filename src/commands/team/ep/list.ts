@@ -1,5 +1,5 @@
 import { AuthenticatedBaseCommand } from '../../../base/authenticated-base-command'
-import { CliUx, Flags } from '@oclif/core'
+import { ux, Flags } from '@oclif/core'
 import chalk from 'chalk'
 import * as utils from '../../../utils'
 
@@ -37,7 +37,7 @@ export default class TeamEpList extends AuthenticatedBaseCommand<typeof TeamEpLi
       description: 'Delimiter for fields that have more than one value',
       default: '\\n',
     }),
-    ...CliUx.ux.table.flags(),
+    ...ux.table.flags(),
   }
 
   public async init(): Promise<void> {
@@ -53,10 +53,10 @@ export default class TeamEpList extends AuthenticatedBaseCommand<typeof TeamEpLi
   async run() {
     let team_ids = []
     if (this.flags.name) {
-      CliUx.ux.action.start('Finding teams in PD')
+      ux.action.start('Finding teams in PD')
       const teams = await this.pd.fetch('teams', { params: { query: this.flags.name } })
       if (teams.length === 0) {
-        CliUx.ux.action.stop(chalk.bold.red('no teams found matching ') + chalk.bold.blue(this.flags.name))
+        ux.action.stop(chalk.bold.red('no teams found matching ') + chalk.bold.blue(this.flags.name))
         this.exit(0)
       }
       for (const team of teams) {
@@ -73,7 +73,7 @@ export default class TeamEpList extends AuthenticatedBaseCommand<typeof TeamEpLi
     }
 
     if (team_ids.length === 0) {
-      CliUx.ux.action.stop(chalk.bold.red('no teams specified'))
+      ux.action.stop(chalk.bold.red('no teams specified'))
       this.exit(0)
     }
 
@@ -92,7 +92,7 @@ export default class TeamEpList extends AuthenticatedBaseCommand<typeof TeamEpLi
       }
       eps = [...eps, ...r]
     }
-    CliUx.ux.action.stop(chalk.bold.green('done'))
+    ux.action.stop(chalk.bold.green('done'))
 
     if (this.flags.json) {
       await this.printJsonAndExit(eps)
