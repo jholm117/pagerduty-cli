@@ -1,29 +1,49 @@
 pagerduty-cli
 =============
 
-# Note: I am not maintaining this project any more and it will be archived soon. Please reach out to support@pagerduty.com if you have any questions about PagerDuty CLI.
-
 PagerDuty Command Line Interface
 
-[![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
-[![Version](https://img.shields.io/npm/v/pagerduty-cli.svg)](https://npmjs.org/package/pagerduty-cli)
-[![Downloads/week](https://img.shields.io/npm/dw/pagerduty-cli.svg)](https://npmjs.org/package/pagerduty-cli)
-[![License](https://img.shields.io/npm/l/pagerduty-cli.svg)](https://github.com/martindstone/pagerduty-cli/blob/master/package.json)
+> Fork of [martindstone/pagerduty-cli](https://github.com/martindstone/pagerduty-cli), modernized and maintained.
 
-<!-- toc -->
-* [Usage](#usage)
-* [Command Topics](#command-topics)
-<!-- tocstop -->
-# Usage
+[![oclif](https://img.shields.io/badge/cli-oclif_v3-brightgreen.svg)](https://oclif.io)
+[![License](https://img.shields.io/npm/l/pagerduty-cli.svg)](https://github.com/jholm117/pagerduty-cli/blob/master/package.json)
 
-## See the [User Guide](https://github.com/martindstone/pagerduty-cli/wiki/PagerDuty-CLI-User-Guide)!
+## Requirements
+
+- Node.js 22 LTS or later
+
+## Install
+
+```bash
+git clone https://github.com/jholm117/pagerduty-cli.git
+cd pagerduty-cli
+npm install
+npm link
+```
+
+## Authentication
+
+```bash
+# OAuth browser flow (recommended)
+pd login
+
+# Or use an API token
+pd auth:set -t <your-token>
+
+# Verify
+pd auth list
+```
+
+## Usage
+
+See the [User Guide](https://github.com/martindstone/pagerduty-cli/wiki/PagerDuty-CLI-User-Guide) (upstream, still applicable).
 
 <!-- commands -->
 # Command Topics
 
 * [`pd analytics`](docs/analytics.md) - Get PagerDuty Incident Analytics
 * [`pd auth`](docs/auth.md) - Get/Set authentication token
-* [`pd autocomplete`](docs/autocomplete.md) - display autocomplete installation instructions
+* [`pd autocomplete`](docs/autocomplete.md) - Display autocomplete installation instructions.
 * [`pd automation`](docs/automation.md) - Manage automation actions and runners
 * [`pd bs`](docs/bs.md) - See/manage business services
 * [`pd commands`](docs/commands.md) - list all the commands
@@ -39,9 +59,17 @@ PagerDuty Command Line Interface
 * [`pd service`](docs/service.md) - See/manage services
 * [`pd tag`](docs/tag.md) - Assign/Remove Tags to/from PagerDuty objects
 * [`pd team`](docs/team.md) - See/Manage teams
-* [`pd update`](docs/update.md) - update the pd CLI
 * [`pd user`](docs/user.md) - See/manage users
 * [`pd util`](docs/util.md) - Utility commands
 * [`pd version`](docs/version.md)
 
 <!-- commandsstop -->
+
+## Changes from upstream
+
+- TypeScript 4 → 5, targeting Node 22 LTS
+- oclif/core v1 → v3
+- ESLint 8 → 9 (flat config)
+- Mocha 10 → 11, nyc 15 → 18
+- Removed dead deps (aws-sdk, plugin-update, fs-extra-debug)
+- 0 npm audit vulnerabilities

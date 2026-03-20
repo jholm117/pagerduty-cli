@@ -20,7 +20,7 @@ export abstract class AuthenticatedBaseCommand<T extends typeof Command> extends
     }),
   }
 
-  protected flags!: Flags<T>
+  protected declare flags: Flags<T>
 
   public async refreshToken(alias: string | undefined): Promise<boolean> {
     const { alias: configAlias, subdomain, accessToken: access_token, refreshToken: refresh_token, expiresAt: expires_at } = this._config.get(alias) as ConfigSubdomain

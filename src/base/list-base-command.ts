@@ -38,7 +38,7 @@ export abstract class ListBaseCommand<T extends typeof Command> extends Authenti
     ...ux.table.flags(),
   }
 
-  protected flags!: Flags<T>
+  protected declare flags: Flags<T>
 
   public async init(): Promise<void> {
     await super.init()
