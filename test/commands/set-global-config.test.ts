@@ -1,9 +1,12 @@
 import {expect, test} from '@oclif/test'
 
+const globalAny: any = global
+
 describe('hooks', () => {
   test
-  .stdout()
-  .hook('init', {id: 'mycommand'})
-  .do(output => expect(output.stdout).to.contain('example hook running mycommand'))
-  .it('shows a message')
+  .hook('init', {id: 'set-global-config'})
+  .it('sets global.config on init', () => {
+    expect(globalAny.config).to.be.ok
+    expect(globalAny.config).to.have.property('root')
+  })
 })
