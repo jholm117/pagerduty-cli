@@ -49,19 +49,19 @@ Forked from `martindstone/pagerduty-cli` (unmaintained). oclif-based CLI with ~9
 
 **Exit criteria:** `npm test` runs, `eslint` passes, `tsc` compiles, zero critical/high vulns.
 
-### Wave 2: oclif 1 → 4 Migration
+### Wave 2: oclif 1 → 3 Migration
 
-**Breaking changes to address:**
-- `CliUx` removed → use `ux` from `@oclif/core`
-- Flag/arg definition API changes
-- Auto-parse replaces manual `this.parse()`
-- Base command signature changes
-- `bin/run` bootstrap updated to v4 pattern
+**Why v3, not v4:** oclif v4 removed `ux.table`, `ux.prompt`, and `ux.wait`. This codebase uses `ux.table` in 35+ command files via `CliUx.ux.table.flags()` and `printTable()`. Rewriting all table output is unnecessary scope. v3 renames `CliUx` → `ux` but keeps all APIs intact — a rename-only migration.
+
+**Changes:**
+- `CliUx` → `ux` import rename across 105 files (mechanical sed)
+- `CliUx.ux.X` → `ux.X` usage rename across 105 files
+- Remove `Flags.help()` from base (v3 auto-adds via help plugin)
+- Update `bin/run` bootstrap to v3 async pattern
+- Update `@oclif/plugin-*` to v3-compatible versions
 
 **Scope:**
-- `@oclif/core` 1 → 4 and all `@oclif/plugin-*` to matching majors
-- Update `pd.ts` (`CliUx.ux` → new `ux` import)
-- Update all ~95 command files for base class changes
+- `@oclif/core` 1 → 3 and all `@oclif/plugin-*` to matching majors
 - Regenerate `oclif.manifest.json`
 
 **Nature:** Mechanical but large diff. Command logic unchanged — only oclif wiring.
