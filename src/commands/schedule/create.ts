@@ -57,8 +57,8 @@ export default class ScheduleCreate extends AuthenticatedBaseCommand<typeof Sche
   }
 
   async run() {
-    const now = chrono.parseDate(`now ${this.flags.timezone}`)
-    const handoff_time = chrono.parseDate(`${this.flags.handoff_time} ${this.flags.timezone}`)
+    const now = chrono.parseDate(`now ${this.flags.timezone}`)!
+    const handoff_time = chrono.parseDate(`${this.flags.handoff_time} ${this.flags.timezone}`)!
     if (handoff_time > now) {
       handoff_time.setDate(handoff_time.getDate() - 1)
     }

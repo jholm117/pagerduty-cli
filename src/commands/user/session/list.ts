@@ -83,17 +83,17 @@ export default class UserSessionList extends AuthenticatedBaseCommand<typeof Use
     })
 
     if (this.flags.since) {
-      const since = chrono.parseDate(this.flags.since)
+      const since = chrono.parseDate(this.flags.since)!
       sessions = sessions.filter((x: any) => {
-        const c = chrono.parseDate(x.created_at)
+        const c = chrono.parseDate(x.created_at)!
         return c > since
       })
     }
 
     if (this.flags.until) {
-      const until = chrono.parseDate(this.flags.until)
+      const until = chrono.parseDate(this.flags.until)!
       sessions = sessions.filter((x: any) => {
-        const c = chrono.parseDate(x.created_at)
+        const c = chrono.parseDate(x.created_at)!
         return c < until
       })
     }

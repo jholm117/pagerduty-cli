@@ -88,8 +88,8 @@ export default class ScheduleOverrideAdd extends AuthenticatedBaseCommand<typeof
 
     const body: any = {
       override: {
-        start: chrono.parseDate(this.flags.start).toISOString(),
-        end: chrono.parseDate(this.flags.end).toISOString(),
+        start: chrono.parseDate(this.flags.start)!.toISOString(),
+        end: chrono.parseDate(this.flags.end)!.toISOString(),
         user: {
           id: userID,
           type: 'user_reference',
