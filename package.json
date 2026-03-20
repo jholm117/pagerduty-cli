@@ -183,5 +183,10 @@
     "test": "nyc --extension .ts mocha --forbid-only \"test/**/*.test.ts\"",
     "version": "oclif readme --multi && git add README.md docs"
   },
-  "types": "lib/index.d.ts"
+  "types": "lib/index.d.ts",
+  "overrides": {
+    "underscore": "1.13.8",
+    "serialize-javascript": "7.0.4",
+    "diff": "8.0.3"
+  }
 }
