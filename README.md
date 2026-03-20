@@ -10,9 +10,18 @@ PagerDuty Command Line Interface
 
 ## Requirements
 
-- Node.js 22 LTS or later
+- Node.js 24 LTS or later (bundled when installed via Homebrew)
 
 ## Install
+
+### Homebrew (recommended)
+
+```bash
+brew tap jholm117/tap
+brew install pd
+```
+
+### From source
 
 ```bash
 git clone https://github.com/jholm117/pagerduty-cli.git
@@ -67,7 +76,7 @@ See the [User Guide](https://github.com/martindstone/pagerduty-cli/wiki/PagerDut
 
 ## Changes from upstream
 
-- TypeScript 4 → 5, targeting Node 22 LTS
+- TypeScript 4 → 5, targeting Node 24 LTS
 - oclif/core v1 → v3
 - ESLint 8 → 9 (flat config)
 - Mocha 10 → 11, nyc 15 → 18
